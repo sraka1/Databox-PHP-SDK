@@ -12,13 +12,13 @@ class DataboxException extends BadResponseException
      * Reason for the exception, ie. 'Too Many Requests'
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * Message, ie. 'One request every 15 minute is allowed.'
      * @var string
      */
-    private $message;
+    protected $message;
 
     /**
      * Factory method to create a new response exception based on the response code.

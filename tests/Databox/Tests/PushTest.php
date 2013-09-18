@@ -10,21 +10,20 @@ class PushTest extends DataboxTestCase
         $this->builder->addKpi("myExtraKey", 300, "2013-07-30T22:53:00");
 
         $res = $this->client->setPushData([
-        'uniqueUrl' => 'leURL125',
-        'payload'   => $this->builder->getPayload()
+            'uniqueUrl' => '3rglns26g76sws04',
+            'payload'   => $this->builder->getPayload()
         ]);
         $this->assertTrue($res->hasKey('response'));
-        $this->assertEquals('OK',$res->get('response')['type']);
+        $this->assertEquals('success', $res->get('response')['type']);
 
     }
 
-    /**
-     * @depends testPushData
-     */
-    public function testGetPushLog($id)
+    public function testGetPushLog()
     {
-        $result = $this->client->getPushDataLog();
+        $result = $this->client->getPushDataLog([
+            'uniqueUrl' => '3rglns26g76sws04'
+        ]);
 
-        $this->assertTrue($res->hasKey('response'));
+        $this->assertTrue(isset($result[0]['time']));
     }
 }

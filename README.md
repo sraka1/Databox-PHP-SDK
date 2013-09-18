@@ -89,7 +89,12 @@ $builder->reset();
 $builder->addKpi("mySecondAppKey", 123);
 $builder->addKpi("mySecondAppExtraKey", 300, "2013-07-30T22:53:00");
 
+//Fetch the saved data log
+$log = $client->getPushDataLog([
+    'uniqueUrl' => '3rglns26g76sws04'
+]);
 
+echo $log;
 
 ```
 

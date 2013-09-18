@@ -11,7 +11,7 @@ return array(
     'operations' => array(
         'SetPushData' => array(
             'httpMethod' => 'POST',
-            'uri' => 'apps/custom/{uniqueUrl}',
+            'uri' => 'push/custom/{uniqueUrl}',
             'summary' => 'Push data to your custom app',
             'responseClass' => 'SetPushDataOutput',
             'parameters' => array(
@@ -31,7 +31,7 @@ return array(
         ),
         'GetPushDataLog' => array(
             'httpMethod' => 'GET',
-            'uri' => 'apps/custom/{uniqueUrl}/logs',
+            'uri' => 'push/custom/{uniqueUrl}/logs',
             'summary' => 'Get a log of all pushed data to your app',
             'responseClass' => 'GetPushDataLogOutput',
             'parameters' => array(

@@ -12,9 +12,6 @@ class BuilderTest extends DataboxTestCase
         $this->assertEquals('{"data":[{"key":"milan","value":150,"date":"2013-09-17T23:15:18"},{"key":"kucan","value":250,"date":"2013-07-30T22:55:00"}]}', $this->builder->getPayload());
     }
 
-    /**
-     * @depends testPushData
-     */
     public function testReset()
     {
         $this->builder->reset();

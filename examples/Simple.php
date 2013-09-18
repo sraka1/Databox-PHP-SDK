@@ -12,7 +12,7 @@ use \Exception;
 // api_key is required, but if you intend to push to only one custom connection, you can add uniqueUrl aswell.
 
 $client = DataboxClient::factory([
-    'apiKey' => "1234321"
+    'apiKey' => "5dc5qvbnb9wcwogww8w0g8g8scgo4swg"
 ]);
 
 //Instantiate the builder
@@ -24,10 +24,12 @@ $builder->addKpi("myExtraKey", 300, "2013-07-30T22:53:00");
 
 //You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
 try {
-    $client->setPushData([
-        'uniqueUrl' => 'leURL125',
+    //If no Exception is raised everything went through as it should've :)
+    $returnedResult = $client->setPushData([
+        'uniqueUrl' => '3rglns26g76sws04',
         'payload'   => $builder->getPayload()
     ]);
+    echo $returnedResult;
 } catch (DataboxException $e) {
     echo $e->getType();
     echo $e->getWebMessage();
@@ -43,3 +45,10 @@ try {
 $builder->reset();
 $builder->addKpi("mySecondAppKey", 123);
 $builder->addKpi("mySecondAppExtraKey", 300, "2013-07-30T22:53:00");
+
+//Fetch the saved data log
+$log = $client->getPushDataLog([
+	'uniqueUrl' => '3rglns26g76sws04'
+]);
+
+echo $log;
