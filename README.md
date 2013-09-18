@@ -1,6 +1,6 @@
 # Databox PHP SDK
 
-[![Build Status](https://travis-ci.org/sraka1/Databox-PHP-SDK.png)](https://travis-ci.org/sraka1/Databox-PHP-SDK])
+[![Build Status](https://travis-ci.org/sraka1/Databox-PHP-SDK.png?branch=master)](https://travis-ci.org/sraka1/Databox-PHP-SDK)
 
 The PHP SDK for interacting with the Databox Push API.
 
