@@ -3,6 +3,7 @@
 namespace Databox;
 
 use \DateTime;
+use \DateTimeZone;
 
 class DataboxBuilder
 {
