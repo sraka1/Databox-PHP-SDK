@@ -19,7 +19,8 @@ class DataboxBuilder
     public function addKpi($key, $value, $date = null)
     {
         if (is_null($date)) {
-            $date = new DateTime();
+            $UTC = new DateTimeZone("UTC");
+            $date = new DateTime("now", $UTC);
             $date = $date->format('Y-m-d\TH:i:s');
         }
         $this->JSON['data'][] = ["key" => $key, "value" => $value, "date" => $date];
