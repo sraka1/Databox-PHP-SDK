@@ -102,7 +102,7 @@ echo $log;
 
 ## Documentation
 
-See the `doc` directory for more detailed documentation.
+See the `doc` directory for more detailed documentation. 
 
 ## License
 
