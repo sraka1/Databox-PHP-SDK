@@ -23,14 +23,26 @@ class DataboxClientBuilder
 
     private $userAgent = 'Databox-PHP-SDK/1.0';
 
+    /**
+     *
+     * @param string $databoxBaseUrl            
+     * @return DataboxClientBuilder
+     */
     public function setDataboxBaseUrl($databoxBaseUrl)
     {
         $this->databoxBaseUrl = $databoxBaseUrl;
+        return self;
     }
 
+    /**
+     *
+     * @param string $apiKey            
+     * @return DataboxClientBuilder
+     */
     public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
+        return self;
     }
 
     /**
