@@ -33,7 +33,7 @@ class DataboxClient extends Client implements IClient
             throw new \Exception("push URL not provided.");
         }
         /* if all data is provided then push the data */
-        $this->setPushData([
+        return $this->setPushData([
             'uniqueUrl' => $this->pushUrl,
             'payload' => $payload
         ]);
