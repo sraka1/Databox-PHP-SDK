@@ -26,15 +26,17 @@ class DataboxClient extends Client implements IClient
      */
     public function pushData(array $payload, $pushUrl = null)
     {
-        if (! isset($pushUrl)) {
+        if (! isset($pushUrl) || $pushUrl == '') {
             $pushUrl = $this->pushUrl;
         }
+        
+        /* if push URL is still not set, then this is an error */
         if (! isset($pushUrl)) {
-            throw new \Exception("push URL not provided.");
+            throw new \Exception("Push URL not provided.");
         }
         /* if all data is provided then push the data */
         return $this->setPushData([
-            'uniqueUrl' => $this->pushUrl,
+            'uniqueUrl' => $pushUrl,
             'payload' => $payload
         ]);
     }
