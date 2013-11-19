@@ -37,7 +37,7 @@ class DataboxClientBuilder
     public function setDataboxBaseUrl($databoxBaseUrl)
     {
         $this->databoxBaseUrl = $databoxBaseUrl;
-        return self;
+        return $this;
     }
 
     /**
@@ -48,7 +48,7 @@ class DataboxClientBuilder
     public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
-        return self;
+        return $this;
     }
 
     /**
@@ -59,7 +59,7 @@ class DataboxClientBuilder
     public function setPushUrl($pushUrl)
     {
         $this->pushUrl = $pushUrl;
-        return self;
+        return $this;
     }
 
     /**
