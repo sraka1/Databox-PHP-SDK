@@ -21,6 +21,12 @@ class DataboxClientBuilder
      */
     private $apiKey;
 
+    /**
+     *
+     * @var string
+     */
+    private $pushUrl;
+
     private $userAgent = 'Databox-PHP-SDK/1.0';
 
     /**
@@ -42,6 +48,17 @@ class DataboxClientBuilder
     public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
+        return self;
+    }
+
+    /**
+     *
+     * @param string $pushUrl            
+     * @return DataboxClientBuilder
+     */
+    public function setPushUrl($pushUrl)
+    {
+        $this->pushUrl = $pushUrl;
         return self;
     }
 
@@ -78,6 +95,8 @@ class DataboxClientBuilder
         
         // Improve the exceptions
         $client->addSubscriber(new Event\ExceptionListener());
+        
+        $client->setPushUrl($this->pushUrl);
         
         // Set service description
         $client->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'));

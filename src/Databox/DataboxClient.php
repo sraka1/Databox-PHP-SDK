@@ -20,6 +20,7 @@ class DataboxClient extends Client implements IClient
      * @var string
      */
     private $pushUrl;
+    
     /*
      * (non-PHPdoc) @see \Databox\Client\IClient::pushData()
      */
