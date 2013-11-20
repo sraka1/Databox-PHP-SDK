@@ -72,14 +72,19 @@ class DataboxClientBuilder
             throw new \Exception("Databox API key not provided. Cannot build the Databox client without API Key provided.");
         }
         
-        if (isset(config()->databox_base_url)) {
-            $config['baseUrl'] = config()->databox_base_url;
+        $config = array();
+        if (isset($databoxBaseUrl)) {
+            $config['baseUrl'] = $databoxBaseUrl;
         }
         
         // Default config options
         $default = array(
             'baseUrl' => $this->databoxBaseUrl,
             'apiKey' => $this->apiKey
+        );
+        
+        $required = array(
+            'apiKey'
         );
         
         // Merge in default settings and validate the config

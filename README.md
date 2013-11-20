@@ -56,9 +56,8 @@ use \Databox\DataboxBuilder;
 
 // api_key is required, but if you intend to push to only one custom connection, you can add uniqueUrl aswell.
 
-$client = DataboxClient::factory([
-    'apiKey' => "1234321"
-]);
+$clientBuilder = new DataboxClientBuilder();
+$client = $clientBuilder->setApiKey('1234321')->build();
 
 //Instantiate the builder
 $builder = new DataboxBuilder();
@@ -69,10 +68,7 @@ $builder->addKpi("myExtraKey", 300, "2013-07-30T22:53:00");
 
 //You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
 try {
-    $client->setPushData([
-        'uniqueUrl' => 'leURL125',
-        'payload'   => $builder->getPayload()
-    ]);
+    $client->pushData($builder->getPayload(), 'leURL125');
 } catch (DataboxException $e) {
     echo $e->getType();
     echo $e->getWebMessage();

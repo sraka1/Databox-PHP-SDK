@@ -24,7 +24,7 @@ class DataboxClient extends Client implements IClient
     /*
      * (non-PHPdoc) @see \Databox\Client\IClient::pushData()
      */
-    public function pushData(array $payload, $pushUrl = null)
+    public function pushData($payload, $pushUrl = null)
     {
         if (! isset($pushUrl) || $pushUrl == '') {
             $pushUrl = $this->pushUrl;
