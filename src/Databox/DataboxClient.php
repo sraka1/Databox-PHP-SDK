@@ -4,6 +4,7 @@ namespace Databox;
 use Guzzle\Common\Collection;
 use Guzzle\Service\Client;
 use Guzzle\Service\Description\ServiceDescription;
+use Databox\Client\IClient;
 
 /**
  * Databox client
@@ -11,37 +12,40 @@ use Guzzle\Service\Description\ServiceDescription;
  * @method \Guzzle\Service\Resource\Model setPushData(array $args = array())
  * @method \Guzzle\Service\Resource\Model getPushDataLog(array $args = array())
  */
-class DataboxClient extends Client
+class DataboxClient extends Client implements IClient
 {
-    public static function factory($config = array())
+
+    /**
+     *
+     * @var string
+     */
+    private $pushUrl;
+    
+    /*
+     * (non-PHPdoc) @see \Databox\Client\IClient::pushData()
+     */
+    public function pushData($payload, $pushUrl = null)
     {
-        // Default config options
-        $default = array('baseUrl' => 'https://app.databox.com/');
-
-        // The following values are required when creating the client
-        $required = array(
-            'apiKey'
-        );
-
-        // Merge in default settings and validate the config
-        $config = Collection::fromConfig($config, $default, $required);
-
-        // Create a new client
-        $client = new self($config->get('baseUrl'), $config);
-
-        // Add authorization
-        $client->addSubscriber(new Event\AuthListener($config->toArray()));
-
-        //Set user-agent
-        $client->setUserAgent('Databox-PHP-SDK/1.0');
-
-        // Improve the exceptions
-        $client->addSubscriber(new Event\ExceptionListener());
-
-        // Set service description
-        $client->setDescription(ServiceDescription::factory(__DIR__.DIRECTORY_SEPARATOR.'config.php'));
-
-        return $client;
+        if (! isset($pushUrl) || $pushUrl == '') {
+            $pushUrl = $this->pushUrl;
+        }
+        
+        /* if push URL is still not set, then this is an error */
+        if (! isset($pushUrl)) {
+            throw new \Exception("Push URL not provided.");
+        }
+        /* if all data is provided then push the data */
+        return $this->setPushData([
+            'uniqueUrl' => $pushUrl,
+            'payload' => $payload
+        ]);
     }
-
+    
+    /*
+     * (non-PHPdoc) @see \Databox\Client\IClient::setPushUrl()
+     */
+    public function setPushUrl($pushUrl)
+    {
+        $this->pushUrl = $pushUrl;
+    }
 }

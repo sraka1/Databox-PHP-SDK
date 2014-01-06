@@ -1,5 +1,4 @@
 <?php
-
 namespace Databox;
 
 use \DateTime;
@@ -7,6 +6,7 @@ use \DateTimeZone;
 
 class DataboxBuilder
 {
+
     /**
      * Class for building JSON request for Databox
      */
@@ -24,13 +24,17 @@ class DataboxBuilder
             $date = new DateTime("now", $UTC);
             $date = $date->format('Y-m-d\TH:i:s');
         }
-        $this->JSON['data'][] = ["key" => $key, "value" => $value, "date" => $date];
+        $this->JSON['data'][] = [
+            "key" => $key,
+            "value" => $value,
+            "date" => $date
+        ];
     }
 
     public function getPayload()
     {
         $payload = json_encode($this->JSON);
-
+        
         return $payload;
     }
 
