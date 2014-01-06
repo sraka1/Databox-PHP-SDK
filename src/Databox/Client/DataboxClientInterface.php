@@ -5,10 +5,10 @@ namespace Databox\Client;
  * This interface should go in Databox-PHP-SDK.
  * DataboxClient should implement this interface (setPushData() should be refactored to pushData).
  *
- * @author uros
+ * @author Uroš Majerič
  *        
  */
-interface IClient
+interface DataboxClientInterface
 {
 
     /**

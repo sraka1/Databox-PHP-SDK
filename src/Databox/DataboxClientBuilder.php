@@ -27,7 +27,7 @@ class DataboxClientBuilder
      */
     private $pushUrl;
 
-    private $userAgent = 'Databox-PHP-SDK/1.0';
+    private $userAgent = 'Databox-PHP-SDK/1.1';
 
     /**
      *

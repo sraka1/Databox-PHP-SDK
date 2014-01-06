@@ -1,0 +1,6 @@
+<?php
+namespace Databox\Widget;
+
+class Pipeline extends Pie
+{
+}

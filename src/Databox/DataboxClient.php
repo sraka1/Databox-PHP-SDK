@@ -4,7 +4,7 @@ namespace Databox;
 use Guzzle\Common\Collection;
 use Guzzle\Service\Client;
 use Guzzle\Service\Description\ServiceDescription;
-use Databox\Client\IClient;
+use Databox\Client\DataboxClientInterface;
 
 /**
  * Databox client
@@ -12,7 +12,7 @@ use Databox\Client\IClient;
  * @method \Guzzle\Service\Resource\Model setPushData(array $args = array())
  * @method \Guzzle\Service\Resource\Model getPushDataLog(array $args = array())
  */
-class DataboxClient extends Client implements IClient
+class DataboxClient extends Client implements DataboxClientInterface
 {
 
     /**
@@ -22,7 +22,7 @@ class DataboxClient extends Client implements IClient
     private $pushUrl;
     
     /*
-     * (non-PHPdoc) @see \Databox\Client\IClient::pushData()
+     * (non-PHPdoc) @see \Databox\Client\DataboxClientInterface::pushData()
      */
     public function pushData($payload, $pushUrl = null)
     {
@@ -42,7 +42,7 @@ class DataboxClient extends Client implements IClient
     }
     
     /*
-     * (non-PHPdoc) @see \Databox\Client\IClient::setPushUrl()
+     * (non-PHPdoc) @see \Databox\Client\DataboxClientInterface::setPushUrl()
      */
     public function setPushUrl($pushUrl)
     {

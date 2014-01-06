@@ -31,10 +31,22 @@ class DataboxBuilder
         ];
     }
 
+    public function addWidget(\Databox\Widget $widget)
+    {
+        $this->JSON = $widget->addData($this);
+    }
+
     public function getPayload()
     {
         $payload = json_encode($this->JSON);
         
+        return $payload;
+    }
+
+    public function getRawPayload()
+    {
+        $payload = $this->JSON;
+
         return $payload;
     }
 
