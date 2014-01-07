@@ -73,9 +73,6 @@ class DataboxClientBuilder
         }
         
         $config = array();
-        if (isset($databoxBaseUrl)) {
-            $config['baseUrl'] = $databoxBaseUrl;
-        }
         
         // Default config options
         $default = array(

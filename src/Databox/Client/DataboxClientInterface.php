@@ -13,10 +13,10 @@ interface DataboxClientInterface
 
     /**
      *
-     * @param array $payload
-     *            - data to be pushed
-     * @param string $pushUrl
-     *            - should be provided if setPushUrl was not called.
+     * @param array $payload Data to be pushed
+     * @param string $pushUrl Should be provided if setPushUrl was not called.
+     *
+     * @return array The server response.
      */
     public function pushData($payload, $pushUrl = null);
 

@@ -4,16 +4,17 @@
 require_once '../vendor/autoload.php';
 
 use \Databox\DataboxClient;
+use \Databox\DataboxClientBuilder;
 use \Databox\DataboxException;
 use \Databox\DataboxBuilder;
 use \Guzzle\Common\Exception\RuntimeException;
 use \Exception;
 
-// api_key is required, but if you intend to push to only one custom connection, you can add uniqueUrl aswell.
+//Instantiate the client bulder
+$clientBuilder = new DataboxClientBuilder();
+$client = $clientBuilder->setDataboxBaseUrl('https://dev.databox.com/')->setApiKey('4yot7fe2uhkwocw44kgwo048g8o8s8og')->build();
+//The client builder extends Guzzle Client, so you can add Guzzle compatible event subscribers and plugins to it if you like
 
-$client = DataboxClient::factory([
-    'apiKey' => "5dc5qvbnb9wcwogww8w0g8g8scgo4swg"
-]);
 
 //Instantiate the builder
 $builder = new DataboxBuilder();
@@ -25,10 +26,7 @@ $builder->addKpi("myExtraKey", 300, "2013-07-30T22:53:00");
 //You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
 try {
     //If no Exception is raised everything went through as it should've :)
-    $returnedResult = $client->setPushData([
-        'uniqueUrl' => '3rglns26g76sws04',
-        'payload'   => $builder->getPayload()
-    ]);
+    $returnedResult = $this->client->pushData($this->builder->getPayload(), '5m86ywhb04kk4cwc');
     echo $returnedResult;
 } catch (DataboxException $e) {
     echo $e->getType();
