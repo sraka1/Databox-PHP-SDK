@@ -1,5 +1,5 @@
 {
-    "name": "databox/databox-sdk",
+    "name": "databox/databox-php-sdk",
     "description": "PHP SDK for Databox",
     "homepage": "http://github.com/databox/php-sdk",
     "type": "library",
