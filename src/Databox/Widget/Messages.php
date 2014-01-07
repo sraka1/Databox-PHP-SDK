@@ -5,36 +5,10 @@ class Messages extends Base
 {
 
     /**
-     * Key of the Widget.
-     * @var string
-     */
-    protected $key;
-
-    /**
      * Message array
      * @var array
      */
-    protected $messages;
-
-    /**
-     * The date for submission
-     * @var string
-     */
-    protected $date;
-
-    /**
-     * Initializes a Messages object.
-     * @param string $key  KPI key for the table.
-     * @param string $date An optional timestamp for this data.
-     */
-    public function __construct($key, $date = NULL)
-    {
-        $this->messages   = [];
-        $this->key        = $key;
-        if (!is_null($date)) {
-            $this->date = $date;
-        }
-    }
+    protected $messages = [];
 
     /**
      * Add a new message to the Messages widget

@@ -5,12 +5,6 @@ class Progress extends Base
 {
 
     /**
-     * Key of the Widget.
-     * @var string
-     */
-    protected $key;
-
-    /**
      * Maximum value
      * @var string
      */
@@ -27,25 +21,6 @@ class Progress extends Base
      * @var string
      */
     protected $value;
-
-    /**
-     * The date for submission
-     * @var string
-     */
-    protected $date;
-
-    /**
-     * Initializes a Table object.
-     * @param string $key  KPI key for the table.
-     * @param string $date An optional timestamp for this data.
-     */
-    public function __construct($key, $date = NULL)
-    {
-        $this->key        = $key;
-        if (!is_null($date)) {
-            $this->date = $date;
-        }
-    }
 
     /**
      * Set max value.
@@ -75,7 +50,7 @@ class Progress extends Base
     }
 
     /**
-     * Returns a DataboxBuilder raw payload.
+     * Returns DataboxBuilder's raw payload.
      * @param DataboxDataboxBuilder $builder Instance of DataboxBuilder.
      */
     public function addData(\Databox\DataboxBuilder $builder)

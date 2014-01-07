@@ -5,49 +5,22 @@ class Table extends Base
 {
 
     /**
-     * Key of the Widget.
-     * @var string
-     */
-    protected $key;
-
-    /**
      * Table columnds
      * @var array
      */
-    protected $columns;
+    protected $columns = [];
 
     /**
      * Table rows
      * @var array
      */
-    protected $rows;
+    protected $rows = [];
 
     /**
      * Allowed column types
      * @var array
      */
     protected $allowedTypes = ["int", "float", "date", "string"];
-
-    /**
-     * The date for submission
-     * @var string
-     */
-    protected $date;
-
-    /**
-     * Initializes a Table object.
-     * @param string $key  KPI key for the table.
-     * @param string $date An optional timestamp for this data.
-     */
-    public function __construct($key, $date = NULL)
-    {
-        $this->columnns   = [];
-        $this->rows       = [];
-        $this->key        = $key;
-        if (!is_null($date)) {
-            $this->date = $date;
-        }
-    }
 
     /**
      * Adds a column to the table

@@ -5,43 +5,16 @@ class Pie extends Base
 {
 
     /**
-     * Key of the Widget.
-     * @var string
-     */
-    protected $key;
-
-    /**
      * Pie labels
      * @var array
      */
-    protected $labels;
+    protected $labels = [];
 
     /**
      * Pie slices
      * @var array
      */
-    protected $slices;
-
-    /**
-     * The date for submission
-     * @var string
-     */
-    protected $date;
-
-    /**
-     * Initializes a Table object.
-     * @param string $key  KPI key for the table.
-     * @param string $date An optional timestamp for this data.
-     */
-    public function __construct($key, $date = NULL)
-    {
-        $this->labels   = [];
-        $this->slices   = [];
-        $this->key        = $key;
-        if (!is_null($date)) {
-            $this->date = $date;
-        }
-    }
+    protected $slices = [];
 
     /**
      * Add a Pie/Funnel/Pipeline slice.
