@@ -9,6 +9,8 @@ use \Databox\DataboxException;
 use \Databox\DataboxBuilder;
 use \Guzzle\Common\Exception\RuntimeException;
 use \Exception;
+use \Databox\Widget as Widget;
+use \Databox\Widget\Table as Table;
 
 //Instantiate the client bulder
 $clientBuilder = new DataboxClientBuilder();
@@ -20,13 +22,54 @@ $client = $clientBuilder->setDataboxBaseUrl('https://dev.databox.com/')->setApiK
 $builder = new DataboxBuilder();
 
 //The addKpi method uses the accepts $key, $value, $date (in that order). Date should be a timestamp in the format Y-m-d\TH:i:s. Date may be NULL, in which case the current UTC time will be used.
-$builder->addKpi("myKey", 123);
-$builder->addKpi("myExtraKey", 300, "2013-07-30T22:53:00");
+$builder->addKpi("testmain", mt_rand(1,600));
+$builder->addKpi("testbignumber", mt_rand(1,600));
+$builder->addKpi("testcompare", mt_rand(1,600));
+$builder->addKpi("testcompare", mt_rand(1,600));
+$builder->addKpi("testintervalvalues", mt_rand(1,600));
+$builder->addKpi("testlinechart", mt_rand(1,600));
+$builder->addKpi("testbarchart", mt_rand(1,600));
+
+$table = new Widget\Table("testtable");
+$table->addColumn("KPI", "string");
+$table->addColumn("Today", "float");
+$table->addColumn("Yesterday", "float");
+$table->addRow(new Table\ColumnData("Visitors"), new Table\ColumnData(1234, 567), new Table\ColumnData(9876, 123));
+$builder->addWidget($table);
+
+$progress = new Widget\Progress("testprogress");
+$progress->setMax(123);
+$progress->setLabel("Life achievements");
+$progress->setValue(10);
+$builder->addWidget($progress);
+
+$messages = new Widget\Messages("testmessages");
+$messages->addMessage("I like pie!");
+$messages->addMessage("Sweden");
+$builder->addWidget($messages);
+
+$pie = new Widget\Pie("testpie");
+$pie->addSlice("Pepperoni", 20);
+$pie->addSlice("Salami", 50, -10);
+$pie->addSlice("Tuna", 70, -30);
+$builder->addWidget($pie);
+
+$pie = new Widget\Funnel("testfunnel");
+$pie->addSlice("Cheese", 5);
+$pie->addSlice("Meat", 90, -10);
+$pie->addSlice("Apples", 10, -30);
+$builder->addWidget($pie);
+
+$pie = new Widget\Pipeline("testpipeline");
+$pie->addSlice("Mac", 20, 24);
+$pie->addSlice("PC", 30, -10);
+$pie->addSlice("Amiga", 10, -10);
+$builder->addWidget($pie);
 
 //You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
 try {
     //If no Exception is raised everything went through as it should've :)
-    $returnedResult = $this->client->pushData($this->builder->getPayload(), '5m86ywhb04kk4cwc');
+    $returnedResult = $client->pushData($builder->getPayload(), '5m86ywhb04kk4cwc');
     echo $returnedResult;
 } catch (DataboxException $e) {
     echo $e->getType();
@@ -46,7 +89,7 @@ $builder->addKpi("mySecondAppExtraKey", 300, "2013-07-30T22:53:00");
 
 //Fetch the saved data log
 $log = $client->getPushDataLog([
-	'uniqueUrl' => '3rglns26g76sws04'
+	'uniqueUrl' => '5m86ywhb04kk4cwc'
 ]);
 
 echo $log;
