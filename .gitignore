@@ -7,3 +7,6 @@ composer.phar
 trace.log
 
 doc/phpdoc-cache*
+/.settings
+/.buildpath
+/.project
