@@ -14,7 +14,7 @@ use Guzzle\Service\Description\ServiceDescription;
 class DataboxClient extends Client implements DataboxClientInterface
 {
 
-    private $userAgent = 'Databox-PHP-SDK/1.1';
+    protected $userAgent = 'Databox-PHP-SDK/1.1';
 
     function __construct($baseUrl = 'https://app.databox.com/')
     {
