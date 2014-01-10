@@ -1,10 +1,9 @@
 <?php
 namespace Databox;
 
-use Guzzle\Common\Collection;
 use Guzzle\Service\Client;
-use Guzzle\Service\Description\ServiceDescription;
 use Databox\Client\DataboxClientInterface;
+use Guzzle\Service\Description\ServiceDescription;
 
 /**
  * Databox client
@@ -15,37 +14,53 @@ use Databox\Client\DataboxClientInterface;
 class DataboxClient extends Client implements DataboxClientInterface
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $pushUrl;
-    
-    /*
-     * (non-PHPdoc) @see \Databox\Client\DataboxClientInterface::pushData()
-     */
-    public function pushData($payload, $pushUrl = null)
+    private $userAgent = 'Databox-PHP-SDK/1.1';
+
+    function __construct($baseUrl = 'https://app.databox.com/')
     {
-        if (! isset($pushUrl) || $pushUrl == '') {
-            $pushUrl = $this->pushUrl;
+        if (is_null($baseUrl)) {
+            throw new \RuntimeException("Base URL has to be provided.");
         }
+        parent::__construct($baseUrl);
+        
+        // Set user-agent
+        $this->setUserAgent($this->userAgent);
+        
+        // Improve the exceptions
+        $this->addSubscriber(new Event\ExceptionListener());
+        
+        // Set service description
+        $this->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'));
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \Databox\Client\DataboxClientInterface::pushData()
+     */
+    public function pushData(DataboxBuilder $dataProvider)
+    {
+        if (! isset($dataProvider->getAppId()) || $dataProvider->getAppId() == '') {
+            throw new \RuntimeException("API KEY not provided for connection.");
+        }
+        $appId = $dataProvider->getAppId();
         
         /* if push URL is still not set, then this is an error */
-        if (! isset($pushUrl)) {
+        if (! isset($appId)) {
             throw new \Exception("Push URL not provided.");
         }
+        
+        $config = array(
+            'apiKey' => $dataProvider->getApiKey()
+        );
+        
+        $this->addSubscriber(new Event\AuthListener($config));
+        
+        $payload = $dataProvider->getPayload();
         /* if all data is provided then push the data */
         return $this->setPushData([
-            'uniqueUrl' => $pushUrl,
+            'uniqueUrl' => $appId,
             'payload' => $payload
         ]);
-    }
-    
-    /*
-     * (non-PHPdoc) @see \Databox\Client\DataboxClientInterface::setPushUrl()
-     */
-    public function setPushUrl($pushUrl)
-    {
-        $this->pushUrl = $pushUrl;
     }
 }

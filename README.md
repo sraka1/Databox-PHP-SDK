@@ -58,13 +58,10 @@ use \Guzzle\Common\Exception\RuntimeException;
 use \Exception;
 
 //Instantiate the client bulder
-$clientBuilder = new DataboxClientBuilder();
-$client = $clientBuilder->setDataboxBaseUrl('https://dev.databox.com/')->setApiKey('4yot7fe2uhkwocw44kgwo048g8o8s8og')->build();
-//The client builder extends Guzzle Client, so you can add Guzzle compatible event subscribers and plugins to it if you like
-
+$client = new DataboxClient('https://dev.databox.com/');
 
 //Instantiate the builder
-$builder = new DataboxBuilder();
+$builder = new DataboxBuilder('4yot7fe2uhkwocw44kgwo048g8o8s8og', '5m86ywhb04kk4cwc');
 
 //The addKpi method uses the accepts $key, $value, $date (in that order). Date should be a timestamp in the format Y-m-d\TH:i:s. Date may be NULL, in which case the current UTC time will be used.
 $builder->addKpi("myKey", 123);
@@ -73,7 +70,7 @@ $builder->addKpi("myExtraKey", 300, "2013-07-30T22:53:00");
 //You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
 try {
     //If no Exception is raised everything went through as it should've :)
-    $returnedResult = $this->client->pushData($this->builder->getPayload(), '5m86ywhb04kk4cwc');
+    $returnedResult = $this->client->pushData($this->builder);
     echo $returnedResult;
 } catch (DataboxException $e) {
     echo $e->getType();

@@ -20,7 +20,7 @@ class PushTest extends DataboxTestCase
         $pie->addSlice("Tuna", 70, -30);
         $this->builder->addWidget($pie);
         
-        $res = $this->client->pushData($this->builder->getPayload(), '5m86ywhb04kk4cwc');
+        $res = $this->client->pushData($this->builder);
         
         $this->assertTrue($res->hasKey('response'));
         $this->assertEquals('success', $res->get('response')['type']);
