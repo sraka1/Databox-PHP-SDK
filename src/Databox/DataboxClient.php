@@ -40,7 +40,8 @@ class DataboxClient extends Client implements DataboxClientInterface
      */
     public function pushData(DataboxBuilder $dataProvider)
     {
-        if (! isset($dataProvider->getAppId()) || $dataProvider->getAppId() == '') {
+        $appId = $dataProvider->getAppId();
+        if (! isset($appId) || $appId == '') {
             throw new \RuntimeException("API KEY not provided for connection.");
         }
         $appId = $dataProvider->getAppId();
