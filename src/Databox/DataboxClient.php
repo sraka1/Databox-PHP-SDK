@@ -30,7 +30,7 @@ class DataboxClient extends Client implements DataboxClientInterface
         
         // Improve the exceptions
         $this->addSubscriber(new Event\ExceptionListener());
-        $this->authListener = new Event\AuthListener($config);
+        $this->authListener = new Event\AuthListener('');
         $this->addSubscriber($this->authListener);
         
         // Set service description
