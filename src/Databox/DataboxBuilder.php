@@ -63,11 +63,6 @@ class DataboxBuilder
         ];
     }
 
-    public function addKpi(KPI $kpi)
-    {
-        $this->addKpi($kpi->getKey(), $kpi->getValue(), $kpi->getDate());
-    }
-
     /**
      * Add widget object to current payload.
      *
