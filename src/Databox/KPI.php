@@ -15,10 +15,6 @@ class KPI
 
     private $date;
 
-    /**
-     * Constructor is private by default.
-     * Use KPI builder to create new instance.
-     */
     function __construct($key, $value, $date = null)
     {
         $this->key = $key;
