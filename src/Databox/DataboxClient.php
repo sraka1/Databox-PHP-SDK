@@ -16,6 +16,8 @@ class DataboxClient extends Client implements DataboxClientInterface
 
     protected $userAgent = 'Databox-PHP-SDK/1.1';
 
+    private $authListener;
+
     function __construct($baseUrl = 'https://app.databox.com/')
     {
         if (is_null($baseUrl)) {
@@ -28,6 +30,8 @@ class DataboxClient extends Client implements DataboxClientInterface
         
         // Improve the exceptions
         $this->addSubscriber(new Event\ExceptionListener());
+        $this->authListener = new Event\AuthListener($config);
+        $this->addSubscriber($this->authListener);
         
         // Set service description
         $this->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'));
@@ -51,11 +55,7 @@ class DataboxClient extends Client implements DataboxClientInterface
             throw new \Exception("Push URL not provided.");
         }
         
-        $config = array(
-            'apiKey' => $dataProvider->getApiKey()
-        );
-        
-        $this->addSubscriber(new Event\AuthListener($config));
+        $this->authListener->setApiKey($dataProvider->getApiKey());
         
         $payload = $dataProvider->getPayload();
         /* if all data is provided then push the data */

@@ -12,20 +12,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class AuthListener implements EventSubscriberInterface
 {
-    /** @var Collection Configuration settings */
-    protected $config;
+    /**
+     *  @var string API Key
+     */
+    private $apiKey;
 
     /**
      * Construct a new auth plugin
      *
-     * @param array $config Configuration array containing these parameters:
-     *     - string 'apiKey'              API key
+     * @param string $apiKey apiKey for the connection
      */
-    public function __construct($config)
+    public function __construct($apiKey)
     {
-        $this->config = Collection::fromConfig($config, array(), array(
-            'apiKey'
-        ));
+        $this->apiKey = $apiKey;
     }
 
     public static function getSubscribedEvents()
@@ -33,6 +32,10 @@ class AuthListener implements EventSubscriberInterface
         return array(
             'request.before_send' => array('onRequestBeforeSend', -1000)
         );
+    }
+    
+    public function setApiKey($apiKey) {
+        $this->apiKey = $apiKey;
     }
 
     /**
@@ -48,8 +51,8 @@ class AuthListener implements EventSubscriberInterface
             $request->setheader('Accept', 'application/json');
         }
         $header = $request->getHeader('Authorization');
-        if (isset($this->config['apiKey']) && empty($header)) {
-            $request->setAuth($this->config['apiKey'], 'DataboxPHPSDK');
+        if (isset($this->apiKey) && empty($header)) {
+            $request->setAuth($this->apiKey, 'DataboxPHPSDK');
         }
 
     }
