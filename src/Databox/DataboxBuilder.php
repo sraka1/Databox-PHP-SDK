@@ -62,6 +62,14 @@ class DataboxBuilder
             "date" => $date
         ];
     }
+    
+    /**
+     * @return boolean true if there was no KPI added to this builder, false otherwise.
+     */
+    public function isEmpty()
+    {
+        return empty($this->JSON);
+    }
 
     /**
      * Add widget object to current payload.
