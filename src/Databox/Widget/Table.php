@@ -58,7 +58,7 @@ class Table extends Base
         }
         $this->rows[] = ["row" => $rowData, "change" => $changeData, "format" => $formatData];
     }
-
+    
     /**
      * Returns a DataboxBuilder raw payload.
      * @param DataboxDataboxBuilder $builder Instance of DataboxBuilder.
@@ -72,5 +72,49 @@ class Table extends Base
             $builder->addKpi($this->key . "@format_" . $i, $row["format"], ($this->date ? $this->date : NULL));
         }
         return $builder->getRawPayload();
+    }
+    
+    /**
+     * Method removes all columns with no data
+     */
+    public function removeEmptyColumns()
+    {
+        /* First search for all empty columns */
+        $emptyColumns = $this->findEmptyColumns();
+        /* iterate all columns */
+        for ($i = count($this->columns) - 1; $i >= 0; $i --) {
+            /* if column is empty then remove it from columns and rows */
+            if (in_array($i, $emptyColumns)) {
+                unset($this->columns[$i]);
+                foreach ($this->rows as &$row) {
+                    unset($row['row'][$i]);
+                    unset($row['change'][$i]);
+                    unset($row['format'][$i]);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Method searches for all columns that have all cells empty.
+     *
+     * @return multitype:number
+     */
+    private function findEmptyColumns()
+    {
+        $emptyColumnIndexes = array();
+        for ($i = 0; $i < count($this->columns); $i ++) {
+            $isEmpty = true;
+            foreach ($this->rows as $row) {
+                if (! is_null($row['row'][$i])) {
+                    $isEmpty = false;
+                    break;
+                }
+            }
+            if ($isEmpty) {
+                $emptyColumnIndexes[] = $i;
+            }
+        }
+        return $emptyColumnIndexes;
     }
 }
