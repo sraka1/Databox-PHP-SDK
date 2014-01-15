@@ -17,25 +17,32 @@ class Table extends Base
     protected $rows = [];
 
     /**
-     * Allowed column types
+     * Table changes
      * @var array
      */
-    protected $allowedTypes = ["int", "float", "date", "string"];
+    protected $changes = [];
+
+    /**
+     * Table formats
+     * @var array
+     */
+    protected $formats = [];
+
+    /**
+     * Table column orders
+     * @var array
+     */
+    protected $orderBy = [];
 
     /**
      * Adds a column to the table
      * @param string $name Column name
      * @param string $type Column type
      */
-    public function addColumn($name, $type)
+    public function addColumn($name, $orderBy = "", $deleteIfEmpty = TRUE)
     {
-        if (!in_array($type, $this->allowedTypes)) {
-            throw new \InvalidArgumentException("Allowed table column types are: 'int', 'float', 'date' and 'string'");
-        }
-        $this->columns[] = [
-            "name" => $name,
-            "type" => $type
-        ];
+        $this->columns[] = $name;
+        $this->orderBy[] = $orderBy;
     }
 
     /**
@@ -56,7 +63,9 @@ class Table extends Base
             $changeData[] = $columnDataItem->getChange();
             $formatData[] = $columnDataItem->getFormat();
         }
-        $this->rows[] = ["row" => $rowData, "change" => $changeData, "format" => $formatData];
+        $this->rows[] = $rowData;
+        $this->changes[] = $changeData;
+        $this->formats[] = $formatData;
     }
     
     /**
@@ -66,11 +75,10 @@ class Table extends Base
     public function addData(\Databox\DataboxBuilder $builder)
     {
         $builder->addKpi($this->key . "@columns", $this->columns, ($this->date ? $this->date : NULL));
-        foreach ($this->rows as $i => $row) {
-            $builder->addKpi($this->key . "@row_" . $i, $row["row"], ($this->date ? $this->date : NULL));
-            $builder->addKpi($this->key . "@change_" . $i, $row["change"], ($this->date ? $this->date : NULL));
-            $builder->addKpi($this->key . "@format_" . $i, $row["format"], ($this->date ? $this->date : NULL));
-        }
+        $builder->addKpi($this->key . "@rows", $this->rows, ($this->date ? $this->date : NULL));
+        $builder->addKpi($this->key . "@changes", $this->changes, ($this->date ? $this->date : NULL));
+        $builder->addKpi($this->key . "@formats", $this->formats, ($this->date ? $this->date : NULL));
+        $builder->addKpi($this->key . "@order_by", $this->orderBy, ($this->date ? $this->date : NULL));
         return $builder->getRawPayload();
     }
     

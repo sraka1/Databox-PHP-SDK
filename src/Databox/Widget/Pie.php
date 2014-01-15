@@ -5,10 +5,22 @@ class Pie extends Base
 {
 
     /**
-     * Pie slices
+     * Pie labels
      * @var array
      */
-    protected $slices = [];
+    protected $labels = [];
+
+    /**
+     * Pie values
+     * @var array
+     */
+    protected $values = [];
+
+    /**
+     * Pie changes
+     * @var array
+     */
+    protected $changes = [];
 
     /**
      * Add a Pie/Funnel/Pipeline slice.
@@ -18,11 +30,9 @@ class Pie extends Base
      */
     public function addSlice($label, $value, $change = "")
     {
-        $this->slices[] = [
-            "row" => $value,
-            "change" => $change,
-            "label"  => $label
-        ];
+        $this->labels[]  = $label;
+        $this->values[]  = $value;
+        $this->changes[] = $change;
     }
 
     /**
@@ -31,14 +41,9 @@ class Pie extends Base
      */
     public function addData(\Databox\DataboxBuilder $builder)
     {
-        foreach ($this->slices as $i => $slice) {
-            $key      = $this->key . "@row_" . $i;
-            $builder->addKpi($key, $slice["row"], ($this->date ? $this->date : NULL));
-            $labels[$key]  = $slice["label"];
-            $changes[$key] = $slice["change"];
-        }
-        $builder->addKpi($this->key . "@labels", $labels, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@changes", $changes, ($this->date ? $this->date : NULL));
+        $builder->addKpi($this->key . "@labels", $this->labels, ($this->date ? $this->date : NULL));
+        $builder->addKpi($this->key . "@values", $this->values, ($this->date ? $this->date : NULL));
+        $builder->addKpi($this->key . "@changes", $this->changes, ($this->date ? $this->date : NULL));
 
         return $builder->getRawPayload();
     }

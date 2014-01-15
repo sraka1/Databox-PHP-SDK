@@ -55,8 +55,8 @@ class Progress extends Base
      */
     public function addData(\Databox\DataboxBuilder $builder)
     {
-        $builder->addKpi($this->key . "@labels", $this->label, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@max", $this->max, ($this->date ? $this->date : NULL));
+        $builder->addKpi($this->key . "@label", $this->label, ($this->date ? $this->date : NULL));
+        $builder->addKpi($this->key . "@max_value", $this->max, ($this->date ? $this->date : NULL));
         $builder->addKpi($this->key, $this->value, ($this->date ? $this->date : NULL));
         return $builder->getRawPayload();
     }
