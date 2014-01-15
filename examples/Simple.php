@@ -4,7 +4,6 @@
 require_once '../vendor/autoload.php';
 
 use \Databox\DataboxClient;
-use \Databox\DataboxClientBuilder;
 use \Databox\DataboxException;
 use \Databox\DataboxBuilder;
 use \Guzzle\Common\Exception\RuntimeException;
@@ -12,23 +11,20 @@ use \Exception;
 use \Databox\Widget as Widget;
 use \Databox\Widget\Table as Table;
 
-//Instantiate the client bulder
-$clientBuilder = new DataboxClientBuilder();
-$client = $clientBuilder->setDataboxBaseUrl('https://dev.databox.com/')->setApiKey('4yot7fe2uhkwocw44kgwo048g8o8s8og')->build();
-//The client builder extends Guzzle Client, so you can add Guzzle compatible event subscribers and plugins to it if you like
+// Instantiate the client
+$client = new DataboxClient('https://dev.databox.com/');
 
+// Instantiate the builder
+$builder = new DataboxBuilder('4yot7fe2uhkwocw44kgwo048g8o8s8og', '5m86ywhb04kk4cwc');
 
-//Instantiate the builder
-$builder = new DataboxBuilder();
-
-//The addKpi method uses the accepts $key, $value, $date (in that order). Date should be a timestamp in the format Y-m-d\TH:i:s. Date may be NULL, in which case the current UTC time will be used.
-$builder->addKpi("testmain", mt_rand(1,600));
-$builder->addKpi("testbignumber", mt_rand(1,600));
-$builder->addKpi("testcompare", mt_rand(1,600));
-$builder->addKpi("testcompare", mt_rand(1,600));
-$builder->addKpi("testintervalvalues", mt_rand(1,600));
-$builder->addKpi("testlinechart", mt_rand(1,600));
-$builder->addKpi("testbarchart", mt_rand(1,600));
+// The addKpi method uses the accepts $key, $value, $date (in that order). Date should be a timestamp in the format Y-m-d\TH:i:s. Date may be NULL, in which case the current UTC time will be used.
+$builder->addKpi("testmain", mt_rand(1, 600));
+$builder->addKpi("testbignumber", mt_rand(1, 600));
+$builder->addKpi("testcompare", mt_rand(1, 600));
+$builder->addKpi("testcompare", mt_rand(1, 600));
+$builder->addKpi("testintervalvalues", mt_rand(1, 600));
+$builder->addKpi("testlinechart", mt_rand(1, 600));
+$builder->addKpi("testbarchart", mt_rand(1, 600));
 
 $table = new Widget\Table("testtable");
 $table->addColumn("KPI", "string");
@@ -50,26 +46,26 @@ $builder->addWidget($messages);
 
 $pie = new Widget\Pie("testpie");
 $pie->addSlice("Pepperoni", 20);
-$pie->addSlice("Salami", 50, -10);
-$pie->addSlice("Tuna", 70, -30);
+$pie->addSlice("Salami", 50, - 10);
+$pie->addSlice("Tuna", 70, - 30);
 $builder->addWidget($pie);
 
 $pie = new Widget\Funnel("testfunnel");
 $pie->addSlice("Cheese", 5);
-$pie->addSlice("Meat", 90, -10);
-$pie->addSlice("Apples", 10, -30);
+$pie->addSlice("Meat", 90, - 10);
+$pie->addSlice("Apples", 10, - 30);
 $builder->addWidget($pie);
 
 $pie = new Widget\Pipeline("testpipeline");
 $pie->addSlice("Mac", 20, 24);
-$pie->addSlice("PC", 30, -10);
-$pie->addSlice("Amiga", 10, -10);
+$pie->addSlice("PC", 30, - 10);
+$pie->addSlice("Amiga", 10, - 10);
 $builder->addWidget($pie);
 
-//You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
+// You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
 try {
-    //If no Exception is raised everything went through as it should've :)
-    $returnedResult = $client->pushData($builder->getPayload(), '5m86ywhb04kk4cwc');
+    // If no Exception is raised everything went through as it should've :)
+    $returnedResult = $client->pushData($builder);
     echo $returnedResult;
 } catch (DataboxException $e) {
     echo $e->getType();
@@ -80,16 +76,16 @@ try {
     echo $e->getCode();
 } catch (Exception $e) {
     echo $e->getMessage();
-} 
+}
 
-//You can reset the builder and reuse the same instance for pushing to a different custom app, if you want to.
+// You can reset the builder and reuse the same instance for pushing to a different custom app, if you want to.
 $builder->reset();
 $builder->addKpi("mySecondAppKey", 123);
 $builder->addKpi("mySecondAppExtraKey", 300, "2013-07-30T22:53:00");
 
-//Fetch the saved data log
+// Fetch the saved data log
 $log = $client->getPushDataLog([
-	'uniqueUrl' => '5m86ywhb04kk4cwc'
+    'uniqueUrl' => '5m86ywhb04kk4cwc'
 ]);
 
 echo $log;

@@ -11,7 +11,20 @@ class DataboxBuilder
 {
 
     /**
+     *
+     * @var string APIKey required for authenticationg to custom connection
+     */
+    private $apiKey;
+
+    /**
+     *
+     * @var string APP-ID required for authenticationg to custom connection
+     */
+    private $appId;
+
+    /**
      * JSON array holder
+     *
      * @var array
      */
     protected $JSON;
@@ -19,16 +32,22 @@ class DataboxBuilder
     /**
      * Builder constructor
      */
-    public function __construct()
+    public function __construct($apiKey, $appId)
     {
+        $this->apiKey = $apiKey;
+        $this->appId = $appId;
         $this->JSON = [];
     }
 
     /**
      * Add a trivial KPI
-     * @param string $key   KPI key, as set up in the Databox web app.
-     * @param mixed $value  The value
-     * @param string $date  Optional date, otherwise current time will be used.
+     *
+     * @param string $key
+     *            KPI key, as set up in the Databox web app.
+     * @param mixed $value
+     *            The value
+     * @param string $date
+     *            Optional date, otherwise current time will be used.
      */
     public function addKpi($key, $value, $date = null)
     {
@@ -43,10 +62,20 @@ class DataboxBuilder
             "date" => $date
         ];
     }
+    
+    /**
+     * @return boolean true if there was no KPI added to this builder, false otherwise.
+     */
+    public function isEmpty()
+    {
+        return empty($this->JSON);
+    }
 
     /**
      * Add widget object to current payload.
-     * @param DataboxWidgetBase $widget Widget object.
+     *
+     * @param DataboxWidgetBase $widget
+     *            Widget object.
      */
     public function addWidget(\Databox\Widget\Base $widget)
     {
@@ -55,6 +84,7 @@ class DataboxBuilder
 
     /**
      * Returns the current payload in JSON format.
+     *
      * @return string The payload.
      */
     public function getPayload()
@@ -66,12 +96,13 @@ class DataboxBuilder
 
     /**
      * Returns the current payload as a PHP array.
+     *
      * @return array The payload.
      */
     public function getRawPayload()
     {
         $payload = $this->JSON;
-
+        
         return $payload;
     }
 
@@ -81,5 +112,23 @@ class DataboxBuilder
     public function reset()
     {
         $this->JSON = [];
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getAppId()
+    {
+        return $this->appId;
     }
 }
