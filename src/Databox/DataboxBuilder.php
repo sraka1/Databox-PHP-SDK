@@ -32,35 +32,28 @@ class DataboxBuilder
     /**
      * Builder constructor
      */
-    public function __construct($apiKey, $appId)
+    public function __construct()
     {
-        $this->apiKey = $apiKey;
-        $this->appId = $appId;
         $this->JSON = [];
+        $this->JSON['data'] = [];
     }
 
     /**
-     * Add a trivial KPI
-     *
-     * @param string $key
-     *            KPI key, as set up in the Databox web app.
-     * @param mixed $value
-     *            The value
-     * @param string $date
-     *            Optional date, otherwise current time will be used.
+     * Add trivial KPI
+     * @param KPI $kpi The object
      */
-    public function addKpi($key, $value, $date = null)
+    public function addKpi(KPI $kpi)
     {
-        if (is_null($date)) {
-            $UTC = new DateTimeZone("UTC");
-            $date = new DateTime("now", $UTC);
-            $date = $date->format('Y-m-d\TH:i:s');
-        }
-        $this->JSON['data'][] = [
-            "key" => $key,
-            "value" => $value,
-            "date" => $date
-        ];
+        $this->JSON['data'][] = $kpi;
+    }
+
+    /**
+     * Add multiple KPIS to the data array
+     * @param array $kpis Collection of KPIs.
+     */
+    public function addKpis($kpis)
+    {
+        $this->JSON['data'] = array_merge($this->JSON['data'], $kpis);
     }
     
     /**
@@ -79,7 +72,7 @@ class DataboxBuilder
      */
     public function addWidget(\Databox\Widget\Base $widget)
     {
-        $this->JSON = $widget->addData($this);
+        $this->addKpis($widget->getData());
     }
 
     /**
@@ -114,21 +107,4 @@ class DataboxBuilder
         $this->JSON = [];
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getApiKey()
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getAppId()
-    {
-        return $this->appId;
-    }
 }

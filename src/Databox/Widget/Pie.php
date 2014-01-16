@@ -1,6 +1,8 @@
 <?php
 namespace Databox\Widget;
 
+use \Databox\KPI as KPI;
+
 class Pie extends Base
 {
 
@@ -36,15 +38,14 @@ class Pie extends Base
     }
 
     /**
-     * Returns a DataboxBuilder raw payload.
-     * @param DataboxDataboxBuilder $builder Instance of DataboxBuilder.
+     * Returns KPI response array
      */
-    public function addData(\Databox\DataboxBuilder $builder)
+    public function getData()
     {
-        $builder->addKpi($this->key . "@labels", $this->labels, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@values", $this->values, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@changes", $this->changes, ($this->date ? $this->date : NULL));
-
-        return $builder->getRawPayload();
+        $response = [];
+        $response[] = new KPI($this->key . "@labels", $this->labels, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@values", $this->values, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@changes", $this->changes, ($this->date ? $this->date : NULL));
+        return $response;
     }
 }

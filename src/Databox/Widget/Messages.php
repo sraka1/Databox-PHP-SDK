@@ -1,6 +1,8 @@
 <?php
 namespace Databox\Widget;
 
+use \Databox\KPI as KPI;
+
 class Messages extends Base
 {
 
@@ -29,14 +31,14 @@ class Messages extends Base
     }
 
     /**
-     * Returns a DataboxBuilder raw payload.
-     * @param DataboxDataboxBuilder $builder Instance of DataboxBuilder.
+     * Returns a response array.
      */
-    public function addData(\Databox\DataboxBuilder $builder)
+    public function getData()
     {
+        $response = [];
         foreach ($this->messages as $i => $message) {
-            $builder->addKpi($this->key, $this->messages, ($this->date ? $this->date : NULL));
+            $response[] = new KPI($this->key, $this->messages, ($this->date ? $this->date : NULL));
         }
-        return $builder->getRawPayload();
+        return $response;
     }
 }

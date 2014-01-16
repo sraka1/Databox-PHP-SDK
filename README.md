@@ -56,21 +56,68 @@ use \Databox\DataboxException;
 use \Databox\DataboxBuilder;
 use \Guzzle\Common\Exception\RuntimeException;
 use \Exception;
+use \Databox\Widget as Widget;
+use \Databox\Widget\Table as Table;
+use \Databox\KPI as KPI;
 
-//Instantiate the client bulder
+//Instantiate the client
 $client = new DataboxClient('https://dev.databox.com/');
+$client->setApiKey('1znxuvbjrqe8c8k44w848o0owowsgk8c');
+$client->setUniqueUrl('34s0v2pdlmg44wwc');
+//The client builder extends Guzzle Client, so you can add Guzzle compatible event subscribers and plugins to it if you like
 
 //Instantiate the builder
-$builder = new DataboxBuilder('4yot7fe2uhkwocw44kgwo048g8o8s8og', '5m86ywhb04kk4cwc');
+$builder = new DataboxBuilder();
 
 //The addKpi method uses the accepts $key, $value, $date (in that order). Date should be a timestamp in the format Y-m-d\TH:i:s. Date may be NULL, in which case the current UTC time will be used.
-$builder->addKpi("myKey", 123);
-$builder->addKpi("myExtraKey", 300, "2013-07-30T22:53:00");
+$builder->addKpi(new KPI("testmain", mt_rand(1,600)));
+$builder->addKpi(new KPI("testbignumber", mt_rand(1,600)));
+$builder->addKpi(new KPI("testcompare", mt_rand(1,600)));
+$builder->addKpi(new KPI("testcompare", mt_rand(1,600)));
+$builder->addKpi(new KPI("testintervalvalues", mt_rand(1,600)));
+$builder->addKpi(new KPI("testlinechart", mt_rand(1,600)));
+$builder->addKpi(new KPI("testbarchart", mt_rand(1,600)));
+
+$table = new Widget\Table("testtable");
+$table->addColumn("KPI", "string");
+$table->addColumn("Today", "float");
+$table->addColumn("Yesterday", "float");
+$table->addRow(new Table\ColumnData("Visitors"), new Table\ColumnData(1234, 567), new Table\ColumnData(9876, 123));
+$builder->addWidget($table);
+
+$progress = new Widget\Progress("testprogress");
+$progress->setMax(123);
+$progress->setLabel("Life achievements");
+$progress->setValue(10);
+$builder->addWidget($progress);
+
+$messages = new Widget\Messages("testmessages");
+$messages->addMessage("I like pie!");
+$messages->addMessage("Sweden");
+$builder->addWidget($messages);
+
+$pie = new Widget\Pie("testpie");
+$pie->addSlice("Pepperoni", 20);
+$pie->addSlice("Salami", 50, -10);
+$pie->addSlice("Tuna", 70, -30);
+$builder->addWidget($pie);
+
+$pie = new Widget\Funnel("testfunnel");
+$pie->addSlice("Cheese", 5);
+$pie->addSlice("Meat", 90, -10);
+$pie->addSlice("Apples", 10, -30);
+$builder->addWidget($pie);
+
+$pie = new Widget\Pipeline("testpipeline");
+$pie->addSlice("Mac", 20, 24);
+$pie->addSlice("PC", 30, -10);
+$pie->addSlice("Amiga", 10, -10);
+$builder->addWidget($pie);
 
 //You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
 try {
     //If no Exception is raised everything went through as it should've :)
-    $returnedResult = $this->client->pushData($this->builder);
+    $returnedResult = $client->pushData($builder);
     echo $returnedResult;
 } catch (DataboxException $e) {
     echo $e->getType();
@@ -83,15 +130,8 @@ try {
     echo $e->getMessage();
 } 
 
-//You can reset the builder and reuse the same instance for pushing to a different custom app, if you want to.
-$builder->reset();
-$builder->addKpi("mySecondAppKey", 123);
-$builder->addKpi("mySecondAppExtraKey", 300, "2013-07-30T22:53:00");
-
 //Fetch the saved data log
-$log = $client->getPushDataLog([
-    'uniqueUrl' => '3rglns26g76sws04'
-]);
+$log = $client->getPushLog();
 
 echo $log;
 

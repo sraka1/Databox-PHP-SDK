@@ -23,11 +23,13 @@ class DataboxTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->client = new DataboxClient('https://dev.databox.com/');
+        $this->client->setApiKey('1znxuvbjrqe8c8k44w848o0owowsgk8c');
+        $this->client->setUniqueUrl('34s0v2pdlmg44wwc');
         
         $adapter = new ClosureLogAdapter(function ($m) { file_put_contents('trace.log',$m,\FILE_APPEND); });
         $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
         $this->client->addSubscriber($logPlugin);
 
-        $this->builder = new DataboxBuilder('4yot7fe2uhkwocw44kgwo048g8o8s8og', '5m86ywhb04kk4cwc');
+        $this->builder = new DataboxBuilder();
     }
 }

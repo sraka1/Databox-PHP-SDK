@@ -1,14 +1,28 @@
 <?php
 namespace Databox\Widget;
 
+use \Databox\KPI as KPI;
+
 class Pie extends Base
 {
 
     /**
-     * Pie slices
+     * Pie labels
      * @var array
      */
-    protected $slices = [];
+    protected $labels = [];
+
+    /**
+     * Pie values
+     * @var array
+     */
+    protected $values = [];
+
+    /**
+     * Pie changes
+     * @var array
+     */
+    protected $changes = [];
 
     /**
      * Add a Pie/Funnel/Pipeline slice.
@@ -18,29 +32,21 @@ class Pie extends Base
      */
     public function addSlice($label, $value, $change = "")
     {
-        $this->slices[] = [
-            "row" => $value,
-            "change" => $change,
-            "label"  => $label
-        ];
+        $this->labels[]  = $label;
+        $this->values[]  = $value;
+        $this->changes[] = $change;
     }
 
     /**
-     * Returns a DataboxBuilder raw payload.
-     * @param DataboxDataboxBuilder $builder Instance of DataboxBuilder.
+     * Returns KPI response array
      */
-    public function addData(\Databox\DataboxBuilder $builder)
+    public function getData()
     {
-        foreach ($this->slices as $i => $slice) {
-            $key      = $this->key . "@row_" . $i;
-            $builder->addKpi($key, $slice["row"], ($this->date ? $this->date : NULL));
-            $labels[$key]  = $slice["label"];
-            $changes[$key] = $slice["change"];
-        }
-        $builder->addKpi($this->key . "@labels", $labels, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@changes", $changes, ($this->date ? $this->date : NULL));
-
-        return $builder->getRawPayload();
+        $response = [];
+        $response[] = new KPI($this->key . "@labels", $this->labels, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@values", $this->values, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@changes", $this->changes, ($this->date ? $this->date : NULL));
+        return $response;
     }
 }
 

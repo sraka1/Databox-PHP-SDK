@@ -31,8 +31,7 @@ abstract class Base
 
     /**
      * addData returns the data array produced by the widget
-     * @param DataboxDataboxBuilder $builder DataboxBuilder instance
      */
-    abstract public function addData(\Databox\DataboxBuilder $builder);
+    abstract public function getData();
 
 }

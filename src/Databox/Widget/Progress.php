@@ -1,6 +1,8 @@
 <?php
 namespace Databox\Widget;
 
+use \Databox\KPI as KPI;
+
 class Progress extends Base
 {
 
@@ -50,14 +52,14 @@ class Progress extends Base
     }
 
     /**
-     * Returns DataboxBuilder's raw payload.
-     * @param DataboxDataboxBuilder $builder Instance of DataboxBuilder.
+     * Returns KPI response array
      */
-    public function addData(\Databox\DataboxBuilder $builder)
+    public function getData()
     {
-        $builder->addKpi($this->key . "@label", $this->label, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@max_value", $this->max, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key, $this->value, ($this->date ? $this->date : NULL));
-        return $builder->getRawPayload();
+        $response = [];
+        $response[] = new KPI($this->key . "@label", $this->label, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@max_value", $this->max, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key, $this->value, ($this->date ? $this->date : NULL));
+        return $response;
     }
 }

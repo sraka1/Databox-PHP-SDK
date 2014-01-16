@@ -11,7 +11,20 @@ class DataboxBuilder
 {
 
     /**
+     *
+     * @var string APIKey required for authenticationg to custom connection
+     */
+    private $apiKey;
+
+    /**
+     *
+     * @var string APP-ID required for authenticationg to custom connection
+     */
+    private $appId;
+
+    /**
      * JSON array holder
+     *
      * @var array
      */
     protected $JSON;
@@ -22,39 +35,49 @@ class DataboxBuilder
     public function __construct()
     {
         $this->JSON = [];
+        $this->JSON['data'] = [];
     }
 
     /**
-     * Add a trivial KPI
-     * @param string $key   KPI key, as set up in the Databox web app.
-     * @param mixed $value  The value
-     * @param string $date  Optional date, otherwise current time will be used.
+     * Add trivial KPI
+     * @param KPI $kpi The object
      */
-    public function addKpi($key, $value, $date = null)
+    public function addKpi(KPI $kpi)
     {
-        if (is_null($date)) {
-            $UTC = new DateTimeZone("UTC");
-            $date = new DateTime("now", $UTC);
-            $date = $date->format('Y-m-d\TH:i:s');
-        }
-        $this->JSON['data'][] = [
-            "key" => $key,
-            "value" => $value,
-            "date" => $date
-        ];
+        $this->JSON['data'][] = $kpi;
+    }
+
+    /**
+     * Add multiple KPIS to the data array
+     * @param array $kpis Collection of KPIs.
+     */
+    public function addKpis($kpis)
+    {
+        $this->JSON['data'] = array_merge($this->JSON['data'], $kpis);
+    }
+    
+    /**
+     * @return boolean true if there was no KPI added to this builder, false otherwise.
+     */
+    public function isEmpty()
+    {
+        return empty($this->JSON);
     }
 
     /**
      * Add widget object to current payload.
-     * @param DataboxWidgetBase $widget Widget object.
+     *
+     * @param DataboxWidgetBase $widget
+     *            Widget object.
      */
     public function addWidget(\Databox\Widget\Base $widget)
     {
-        $this->JSON = $widget->addData($this);
+        $this->addKpis($widget->getData());
     }
 
     /**
      * Returns the current payload in JSON format.
+     *
      * @return string The payload.
      */
     public function getPayload()
@@ -66,12 +89,13 @@ class DataboxBuilder
 
     /**
      * Returns the current payload as a PHP array.
+     *
      * @return array The payload.
      */
     public function getRawPayload()
     {
         $payload = $this->JSON;
-
+        
         return $payload;
     }
 
@@ -82,5 +106,6 @@ class DataboxBuilder
     {
         $this->JSON = [];
     }
+
 }
 

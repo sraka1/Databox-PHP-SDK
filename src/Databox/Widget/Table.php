@@ -1,6 +1,8 @@
 <?php
 namespace Databox\Widget;
 
+use \Databox\KPI as KPI;
+
 class Table extends Base
 {
 
@@ -69,17 +71,17 @@ class Table extends Base
     }
     
     /**
-     * Returns a DataboxBuilder raw payload.
-     * @param DataboxDataboxBuilder $builder Instance of DataboxBuilder.
+     * Returns KPI response array
      */
-    public function addData(\Databox\DataboxBuilder $builder)
+    public function getData()
     {
-        $builder->addKpi($this->key . "@columns", $this->columns, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@rows", $this->rows, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@changes", $this->changes, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@formats", $this->formats, ($this->date ? $this->date : NULL));
-        $builder->addKpi($this->key . "@order_by", $this->orderBy, ($this->date ? $this->date : NULL));
-        return $builder->getRawPayload();
+        $response = [];
+        $response[] = new KPI($this->key . "@columns", $this->columns, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@rows", $this->rows, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@changes", $this->changes, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@formats", $this->formats, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@order_by", $this->orderBy, ($this->date ? $this->date : NULL));
+        return $response;
     }
     
     /**
@@ -91,13 +93,17 @@ class Table extends Base
         $emptyColumns = $this->findEmptyColumns();
         /* iterate all columns */
         for ($i = count($this->columns) - 1; $i >= 0; $i --) {
-            /* if column is empty then remove it from columns and rows */
+            /* if column is empty then remove it from columns and rows; Don't like this. MUST REFACTOR! */
             if (in_array($i, $emptyColumns)) {
                 unset($this->columns[$i]);
                 foreach ($this->rows as &$row) {
-                    unset($row['row'][$i]);
-                    unset($row['change'][$i]);
-                    unset($row['format'][$i]);
+                    unset($row[$i]);
+                }
+                foreach ($this->changes as &$row) {
+                    unset($row[$i]);
+                }
+                foreach ($this->formats as &$row) {
+                    unset($row[$i]);
                 }
             }
         }
@@ -110,11 +116,11 @@ class Table extends Base
      */
     private function findEmptyColumns()
     {
-        $emptyColumnIndexes = array();
-        for ($i = 0; $i < count($this->columns); $i ++) {
+        $emptyColumnIndexes = [];
+        for ($i = 0; $i < count($this->columns); $i++) {
             $isEmpty = true;
-            foreach ($this->rows as $row) {
-                if (! is_null($row['row'][$i])) {
+            foreach ($this->rows as $row) { //Don't like this. Lots of data -> lots of problems.
+                if (!is_null($row[$i])) {
                     $isEmpty = false;
                     break;
                 }

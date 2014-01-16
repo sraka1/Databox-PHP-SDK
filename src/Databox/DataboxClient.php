@@ -18,7 +18,9 @@ class DataboxClient extends Client implements DataboxClientInterface
 
     private $authListener;
 
-    function __construct($baseUrl = 'https://app.databox.com/')
+    private $uniqueUrl;
+
+    public function __construct($baseUrl = 'https://app.databox.com/')
     {
         if (is_null($baseUrl)) {
             throw new \RuntimeException("Base URL has to be provided.");
@@ -43,25 +45,57 @@ class DataboxClient extends Client implements DataboxClientInterface
      * @see \Databox\Client\DataboxClientInterface::pushData()
      */
     public function pushData(DataboxBuilder $dataProvider)
-    {
-        $appId = $dataProvider->getAppId();
-        if (! isset($appId) || $appId == '') {
-            throw new \RuntimeException("API KEY not provided for connection.");
-        }
-        $appId = $dataProvider->getAppId();
-        
-        /* if push URL is still not set, then this is an error */
-        if (! isset($appId)) {
+    {   
+        if (is_null($this->uniqueUrl)) {
             throw new \Exception("Push URL not provided.");
         }
-        
-        $this->authListener->setApiKey($dataProvider->getApiKey());
+
+        if (is_null($this->authListener->getApiKey())) {
+            throw new \Exception("Api key not set.");
+        }
         
         $payload = $dataProvider->getPayload();
         /* if all data is provided then push the data */
         return $this->setPushData([
-            'uniqueUrl' => $appId,
+            'uniqueUrl' => $this->uniqueUrl,
             'payload' => $payload
+        ]);
+    }
+
+    /**
+     * Sets the API key
+     * @param string $apiKey The API key to be set.
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->authListener->setApiKey($apiKey);
+    }
+
+    /**
+     * Sets unique URL for push
+     * @param string $uniqueUrl Sets the unique URL.
+     */
+    public function setUniqueUrl($uniqueUrl)
+    {
+        $this->uniqueUrl = $uniqueUrl;
+    }
+
+    /**
+     * Returns the push log
+     * @return array Server response.
+     */
+    public function getPushLog()
+    {
+        if (is_null($this->uniqueUrl)) {
+            throw new \Exception("Push URL not provided.");
+        }
+
+        if (is_null($this->authListener->getApiKey())) {
+            throw new \Exception("Api key not set.");
+        }
+
+        return $this->getPushDataLog([
+            'uniqueUrl' => $this->uniqueUrl
         ]);
     }
 }

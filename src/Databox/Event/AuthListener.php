@@ -38,6 +38,10 @@ class AuthListener implements EventSubscriberInterface
         $this->apiKey = $apiKey;
     }
 
+    public function getApiKey() {
+        return $this->apiKey;
+    }
+
     /**
      * Request before-send event handler
      *
