@@ -107,8 +107,15 @@ class Table extends Base
                 }
             }
         }
+        /* reindex rows and columns so that they are no longer associative arrays (which becomes because of removing items) */
+        foreach ($this->rows as &$row) {
+            $row['row'] = array_values($row['row']);
+            $row['change'] = array_values($row['change']);
+            $row['format'] = array_values($row['format']);
+        }
+        $this->columns = array_values($this->columns);
     }
-    
+
     /**
      * Method searches for all columns that have all cells empty.
      *
@@ -117,10 +124,12 @@ class Table extends Base
     private function findEmptyColumns()
     {
         $emptyColumnIndexes = [];
-        for ($i = 0; $i < count($this->columns); $i++) {
+        /* iterate all columns - skip first one (label column) */
+        for ($i = 1; $i < count($this->columns); $i ++) {
             $isEmpty = true;
-            foreach ($this->rows as $row) { //Don't like this. Lots of data -> lots of problems.
-                if (!is_null($row[$i])) {
+            foreach ($this->rows as $row) {
+            $rowValue = $row['row'][$i];
+                if (! is_null($rowValue) && isset($rowValue) && ! empty($rowValue) && is_numeric($rowValue)) {
                     $isEmpty = false;
                     break;
                 }
