@@ -135,7 +135,7 @@ class Table extends Base
             $row['row'] = array_values($row['row']);
             $row['change'] = array_values($row['change']);
             $row['format'] = array_values($row['format']);
-            $row['change_format'] = array_values($row['format']);
+            $row['change_format'] = array_values($row['change_format']);
         }
         $this->columns = array_values($this->columns);
     }
