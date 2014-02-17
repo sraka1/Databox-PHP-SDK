@@ -10,3 +10,4 @@ doc/phpdoc-cache*
 /.settings
 /.buildpath
 /.project
+/vendor

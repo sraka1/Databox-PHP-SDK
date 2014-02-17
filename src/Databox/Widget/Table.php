@@ -8,38 +8,53 @@ class Table extends Base
 
     /**
      * Table columnds
+     *
      * @var array
      */
     protected $columns = [];
 
     /**
      * Table rows
+     *
      * @var array
      */
     protected $rows = [];
 
     /**
      * Table changes
+     *
      * @var array
      */
     protected $changes = [];
 
     /**
      * Table formats
+     *
      * @var array
      */
     protected $formats = [];
 
     /**
+     * Table changes_formats
+     *
+     * @var array
+     */
+    protected $changes_formats = [];
+
+    /**
      * Table column orders
+     *
      * @var array
      */
     protected $orderBy = [];
 
     /**
      * Adds a column to the table
-     * @param string $name Column name
-     * @param string $type Column type
+     *
+     * @param string $name
+     *            Column name
+     * @param string $type
+     *            Column type
      */
     public function addColumn($name, $orderBy = "", $deleteIfEmpty = TRUE)
     {
@@ -48,7 +63,9 @@ class Table extends Base
     }
 
     /**
-     * @param \Databox\Widget\Table\ColumnData $columnDataOne,... Series of ColumnData objects. Number must match the number of columns.
+     *
+     * @param \Databox\Widget\Table\ColumnData $columnDataOne,...
+     *            Series of ColumnData objects. Number must match the number of columns.
      */
     public function addRow()
     {
@@ -56,20 +73,22 @@ class Table extends Base
         if ($columnCount !== count($this->columns)) {
             throw new \InvalidArgumentException("Row column count does not match the number of instantiated columns.");
         }
-        $columnDataArray  = func_get_args();
+        $columnDataArray = func_get_args();
         foreach ($columnDataArray as $columnDataItem) {
-            if (!$columnDataItem instanceof \Databox\Widget\Table\ColumnData) {
+            if (! $columnDataItem instanceof \Databox\Widget\Table\ColumnData) {
                 throw new \InvalidArgumentException("Data sets for columns must be initialized as \Databox\Widget\Table\ColumnData objects.");
             }
             $rowData[] = $columnDataItem->getValue();
             $changeData[] = $columnDataItem->getChange();
             $formatData[] = $columnDataItem->getFormat();
+            $changeFormatData[] = $columnDataItem->getChangeFormat();
         }
         $this->rows[] = $rowData;
         $this->changes[] = $changeData;
         $this->formats[] = $formatData;
+        $this->changes_formats[] = $changeFormatData;
     }
-    
+
     /**
      * Returns KPI response array
      */
@@ -79,11 +98,12 @@ class Table extends Base
         $response[] = new KPI($this->key . "@columns", $this->columns, ($this->date ? $this->date : NULL));
         $response[] = new KPI($this->key . "@rows", $this->rows, ($this->date ? $this->date : NULL));
         $response[] = new KPI($this->key . "@changes", $this->changes, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@changes_formats", $this->changes_formats, ($this->date ? $this->date : NULL));
         $response[] = new KPI($this->key . "@formats", $this->formats, ($this->date ? $this->date : NULL));
         $response[] = new KPI($this->key . "@order_by", $this->orderBy, ($this->date ? $this->date : NULL));
         return $response;
     }
-    
+
     /**
      * Method removes all columns with no data
      */
@@ -105,10 +125,21 @@ class Table extends Base
                 foreach ($this->formats as &$row) {
                     unset($row[$i]);
                 }
+                foreach ($this->changes_formats as &$row) {
+                    unset($row[$i]);
+                }
             }
         }
+        /* reindex rows and columns so that they are no longer associative arrays (which becomes because of removing items) */
+        foreach ($this->rows as &$row) {
+            $row['row'] = array_values($row['row']);
+            $row['change'] = array_values($row['change']);
+            $row['format'] = array_values($row['format']);
+            $row['change_format'] = array_values($row['change_format']);
+        }
+        $this->columns = array_values($this->columns);
     }
-    
+
     /**
      * Method searches for all columns that have all cells empty.
      *
@@ -117,10 +148,12 @@ class Table extends Base
     private function findEmptyColumns()
     {
         $emptyColumnIndexes = [];
-        for ($i = 0; $i < count($this->columns); $i++) {
+        /* iterate all columns - skip first one (label column) */
+        for ($i = 1; $i < count($this->columns); $i ++) {
             $isEmpty = true;
-            foreach ($this->rows as $row) { //Don't like this. Lots of data -> lots of problems.
-                if (!is_null($row[$i])) {
+            foreach ($this->rows as $row) {
+                $rowValue = $row['row'][$i];
+                if (! is_null($rowValue) && isset($rowValue) && ! empty($rowValue) && is_numeric($rowValue)) {
                     $isEmpty = false;
                     break;
                 }
