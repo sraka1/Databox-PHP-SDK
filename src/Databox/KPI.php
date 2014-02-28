@@ -34,7 +34,7 @@ class KPI
     public function __construct($key, $value, $date = null)
     {
         $this->key = $key;
-        $this->value = $value;
+        $this->value = json_encode($value);
         if (is_null($date) || ! ($date instanceof \DateTime)) {
             $UTC = new \DateTimeZone("UTC");
             $date = new \DateTime("now", $UTC);
@@ -66,12 +66,18 @@ class KPI
      */
     public function getValue()
     {
-        return $this->value;
+        json_decode($string);
+        if (json_last_error() == JSON_ERROR_NONE) {
+            return json_decode($this->value);    
+        } else {
+            return $this->value;
+        }
+        
     }
 
     public function setValue($value)
     {
-        $this->value = $value;
+        $this->value = json_encode($value);
     }
 
     public function getDate()

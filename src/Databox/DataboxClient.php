@@ -14,7 +14,7 @@ use Guzzle\Service\Description\ServiceDescription;
 class DataboxClient extends Client implements DataboxClientInterface
 {
 
-    protected $userAgent = 'Databox-PHP-SDK/1.1';
+    protected $userAgent = 'Databox-PHP-SDK/1.2';
 
     private $authListener;
 
