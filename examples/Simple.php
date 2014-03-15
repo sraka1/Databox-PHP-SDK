@@ -44,9 +44,9 @@ $progress->setLabel("Life achievements");
 $progress->setValue(10);
 $builder->addWidget($progress);
 
-$messages = new Widget\Messages("testmessages");
-$messages->addMessage("I like pie!");
-$messages->addMessage("Sweden");
+$messages = new Widget\Messages("testmessages",);
+$messages->addMessage("I like pie!", "USD");
+$messages->addMessage("Sweden", "USD");
 $builder->addWidget($messages);
 
 $pie = new Widget\Pie("testpie");

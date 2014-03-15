@@ -18,8 +18,8 @@ class PushTest extends DataboxTestCase
         $this->builder->addKpi(new KPI("testintervalvalues", 300, new \DateTime("2013-07-30 22:53:00")));
 
         $messages = new Widget\Messages("testmessages", new \DateTime("2013-09-17 23:15:18"));
-        $messages->addMessage("I like pie!");
-        $messages->addMessage("Sweden");
+        $messages->addMessage("I like pie!", "Number");
+        $messages->addMessage("Sweden", "USD");
         $this->builder->addWidget($messages);
 
         $pie = new Widget\Pie("testpie", new \DateTime("2013-09-17 23:15:18"));

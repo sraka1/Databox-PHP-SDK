@@ -13,12 +13,19 @@ class Messages extends Base
     protected $messages = [];
 
     /**
+     * Icon array
+     * @var array
+     */
+    protected $icons = [];
+
+    /**
      * Add a new message to the Messages widget
      * @param string $message The message to be added.
      */
-    public function addMessage($message)
+    public function addMessage($message, $icon)
     {
         $this->messages[] = $message;
+        $this->icons[]    = $icon;
     }
 
     /**
@@ -36,9 +43,8 @@ class Messages extends Base
     public function getData()
     {
         $response = [];
-        foreach ($this->messages as $i => $message) {
-            $response[] = new KPI($this->key, $this->messages, ($this->date ? $this->date : NULL));
-        }
+        $response[] = new KPI($this->key, $this->messages, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@icons", $this->icons, ($this->date ? $this->date : NULL));
         return $response;
     }
 }
