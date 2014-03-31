@@ -61,9 +61,9 @@ use \Databox\Widget\Table as Table;
 use \Databox\KPI as KPI;
 
 //Instantiate the client
-$client = new DataboxClient('https://dev.databox.com/');
-$client->setApiKey('1znxuvbjrqe8c8k44w848o0owowsgk8c');
-$client->setUniqueUrl('34s0v2pdlmg44wwc');
+$client = new DataboxClient('https://app.databox.com/');
+$client->setApiKey('2fvbxy97j1wkccgw44sk0o44wk0w4kgk'); // username: test@databox.com pw: test123 connection: PHP SDK Test
+$client->setUniqueUrl('32lkojmk5sw08o44');
 //The client builder extends Guzzle Client, so you can add Guzzle compatible event subscribers and plugins to it if you like
 
 //Instantiate the builder
