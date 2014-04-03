@@ -44,7 +44,7 @@ $progress->setLabel("Life achievements");
 $progress->setValue(10);
 $builder->addWidget($progress);
 
-$messages = new Widget\Messages("testmessages",);
+$messages = new Widget\Messages("testmessages");
 $messages->addMessage("I like pie!", "USD");
 $messages->addMessage("Sweden", "USD");
 $builder->addWidget($messages);
@@ -71,7 +71,7 @@ $builder->addWidget($pie);
 try {
     //If no Exception is raised everything went through as it should've :)
     $returnedResult = $client->pushData($builder);
-    echo $returnedResult;
+    is_array($returnedResult) ? print_r($returnedResult) : print($returnedResult);
 } catch (DataboxException $e) {
     echo $e->getType();
     echo $e->getWebMessage();

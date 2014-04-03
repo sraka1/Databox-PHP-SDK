@@ -43,7 +43,7 @@ class Messages extends Base
     public function getData()
     {
         $response = [];
-        $response[] = new KPI($this->key, $this->messages, ($this->date ? $this->date : NULL));
+        $response[] = new KPI($this->key . "@labels", $this->messages, ($this->date ? $this->date : NULL));
         $response[] = new KPI($this->key . "@icons", $this->icons, ($this->date ? $this->date : NULL));
         return $response;
     }

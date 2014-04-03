@@ -34,7 +34,6 @@ class DataboxClient extends Client implements DataboxClientInterface
         $this->addSubscriber(new Event\ExceptionListener());
         $this->authListener = new Event\AuthListener('');
         $this->addSubscriber($this->authListener);
-        
         // Set service description
         $this->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'));
     }
@@ -54,12 +53,26 @@ class DataboxClient extends Client implements DataboxClientInterface
             throw new \Exception("Api key not set.");
         }
         
-        $payload = $dataProvider->getPayload();
-        /* if all data is provided then push the data */
-        return $this->setPushData([
-            'uniqueUrl' => $this->uniqueUrl,
-            'payload' => $payload
-        ]);
+        // Max data size is 1MB. Split it.
+        if ($dataProvider->isPayloadTooBig()) { // Actually 1048576, but let's be sure
+            $payloads = $dataProvider->getSplittedPayloads();
+            $responses = [];
+            foreach ($payloads as $payload) {
+                $responses[] = $this->setPushData([
+                    'uniqueUrl' => $this->uniqueUrl,
+                    'payload' => $payload
+                ]);
+            }
+            return $responses;
+        } else {
+            $payload = $dataProvider->getPayload();
+            /* if all data is provided then push the data */
+            return $this->setPushData([
+                'uniqueUrl' => $this->uniqueUrl,
+                'payload' => $payload
+            ]);
+        }
+        
     }
 
     /**
