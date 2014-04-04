@@ -4,10 +4,11 @@ namespace Databox;
 /**
  *
  * @author Uros Majeric
- *        
+ *
  */
 class KPI
 {
+
     /**
      * Name of key
      * @var string
@@ -27,11 +28,17 @@ class KPI
     public $date;
 
     /**
+     *
+     * @var string
+     */
+    public $operation;
+
+    /**
      * The prescribed date format
      */
     const DATE_FORMAT = 'Y-m-d\TH:i:s';
 
-    public function __construct($key, $value, $date = null)
+    public function __construct($key, $value, $date = null, $metricOperation = null)
     {
         $this->key = $key;
         $this->value = json_encode($value);
@@ -40,6 +47,14 @@ class KPI
             $date = new \DateTime("now", $UTC);
         }
         $this->date = $date->format(self::DATE_FORMAT);
+        if (! is_null($metricOperation)) {
+            if (in_array($metricOperation, [
+                'None',
+                'Sum'
+            ])) {
+                $this->operation = $metricOperation;
+            }
+        }
     }
 
     /**
@@ -55,7 +70,7 @@ class KPI
      * Sets the key
      * @param string $key The key to be set
      */
-    public function setKey($key)    
+    public function setKey($key)
     {
         $this->key = $key;
     }
@@ -89,6 +104,17 @@ class KPI
     {
         $this->date = $date;
     }
+
+    public function getMetricOperation()
+    {
+        return $this->operation;
+    }
+
+    public function setMetricOperation(string $operation)
+    {
+        $this->operation = $operation;
+    }
+
 }
 
 ?>
