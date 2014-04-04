@@ -15,7 +15,7 @@ class DataboxBuilder
      * Maximum size of payload
      * @var integer
      */
-    private $maxPayloadSize = 2000;
+    private $maxPayloadSize = 1000000;
 
     /**
      *
