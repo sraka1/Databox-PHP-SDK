@@ -60,11 +60,13 @@ use \Databox\Widget as Widget;
 use \Databox\Widget\Table as Table;
 use \Databox\KPI as KPI;
 
+// Read from Custom connection info in Databox WebApp (https://app.databox.com)
+$userAccessToken = 'YOUR-USER-ACCESS-TOKEN';
+$sourceToken     = 'YOUR-SOURCE-TOKEN';
+
 //Instantiate the client
-$client = new DataboxClient('https://app.databox.com/');
-$client->setApiKey('2fvbxy97j1wkccgw44sk0o44wk0w4kgk'); // username: test@databox.com pw: test123 connection: PHP SDK Test
-$client->setUniqueUrl('32lkojmk5sw08o44');
-//The client builder extends Guzzle Client, so you can add Guzzle compatible event subscribers and plugins to it if you like
+$client = new DataboxClient($userAccessToken);
+$client->setSourceToken($sourceToken);
 
 //Instantiate the builder
 $builder = new DataboxBuilder();
@@ -118,7 +120,10 @@ $builder->addWidget($pie);
 try {
     //If no Exception is raised everything went through as it should've :)
     $returnedResult = $client->pushData($builder);
-    is_array($returnedResult) ? print_r($returnedResult) : print($returnedResult);
+    
+    is_array($returnedResult)
+        ? print_r($returnedResult)
+        : print($returnedResult);
 } catch (DataboxException $e) {
     echo $e->getType();
     echo $e->getWebMessage();
