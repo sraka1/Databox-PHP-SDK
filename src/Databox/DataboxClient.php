@@ -13,6 +13,7 @@ use Guzzle\Service\Description\ServiceDescription;
  */
 class DataboxClient extends Client implements DataboxClientInterface
 {
+    const DATABOX_API_BASEURL = 'https://api.databox.com';
 
     protected $userAgent = 'Databox-PHP-SDK/1.2';
 
@@ -20,22 +21,30 @@ class DataboxClient extends Client implements DataboxClientInterface
 
     private $uniqueUrl;
 
-    public function __construct($baseUrl = 'https://app.databox.com/')
+    private $userAccessToken;
+
+    public function __construct($accessToken)
     {
-        if (is_null($baseUrl)) {
-            throw new \RuntimeException("Base URL has to be provided.");
+        if (is_null($accessToken)) {
+            throw new \RuntimeException('Access token is required.');
         }
-        parent::__construct($baseUrl);
-        
+        $this->userAccessToken = $accessToken;
+
+        parent::__construct(self::DATABOX_API_BASEURL);
+
         // Set user-agent
         $this->setUserAgent($this->userAgent);
-        
+
         // Improve the exceptions
         $this->addSubscriber(new Event\ExceptionListener());
         $this->authListener = new Event\AuthListener('');
         $this->addSubscriber($this->authListener);
+
         // Set service description
         $this->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'));
+
+        // TODO: Add setAccessToken function to AuthListener class
+        $this->authListener->setApiKey($this->userAccessToken);
     }
 
     /**
@@ -44,7 +53,7 @@ class DataboxClient extends Client implements DataboxClientInterface
      * @see \Databox\Client\DataboxClientInterface::pushData()
      */
     public function pushData(DataboxBuilder $dataProvider)
-    {   
+    {
         if (is_null($this->uniqueUrl)) {
             throw new \Exception("Push URL not provided.");
         }
@@ -52,7 +61,7 @@ class DataboxClient extends Client implements DataboxClientInterface
         if (is_null($this->authListener->getApiKey())) {
             throw new \Exception("Api key not set.");
         }
-        
+
         // Max data size is 1MB. Split it.
         if ($dataProvider->isPayloadTooBig()) { // Actually 1048576, but let's be sure
             $payloads = $dataProvider->getSplittedPayloads();
@@ -72,10 +81,12 @@ class DataboxClient extends Client implements DataboxClientInterface
                 'payload' => $payload
             ]);
         }
-        
+
     }
 
     /**
+     * OBSOLETE - will be removed in next release
+     *
      * Sets the API key
      * @param string $apiKey The API key to be set.
      */
@@ -85,12 +96,24 @@ class DataboxClient extends Client implements DataboxClientInterface
     }
 
     /**
+     * OBSOLETE - will be removed in next release
+     *
      * Sets unique URL for push
      * @param string $uniqueUrl Sets the unique URL.
      */
     public function setUniqueUrl($uniqueUrl)
     {
         $this->uniqueUrl = $uniqueUrl;
+    }
+
+    /**
+     * Set source token
+     *
+     * @param string $sourceToken Token of the custom source
+     */
+    public function setSourceToken($sourceToken)
+    {
+        $this->uniqueUrl = $sourceToken;
     }
 
     /**
