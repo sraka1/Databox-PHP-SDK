@@ -23,14 +23,14 @@ class DataboxClient extends Client implements DataboxClientInterface
 
     private $userAccessToken;
 
-    public function __construct($accessToken)
+    public function __construct($accessToken, $baseUrl = self::DATABOX_API_BASEURL)
     {
         if (is_null($accessToken)) {
             throw new \RuntimeException('Access token is required.');
         }
         $this->userAccessToken = $accessToken;
 
-        parent::__construct(self::DATABOX_API_BASEURL);
+        parent::__construct($baseUrl);
 
         // Set user-agent
         $this->setUserAgent($this->userAgent);
