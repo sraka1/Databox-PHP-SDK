@@ -63,7 +63,7 @@ class KPI
      */
     public function getKey()
     {
-        return $key;
+        return $this->key;
     }
 
     /**
@@ -81,13 +81,11 @@ class KPI
      */
     public function getValue()
     {
-        json_decode($string);
         if (json_last_error() == JSON_ERROR_NONE) {
-            return json_decode($this->value);    
+            return json_decode($this->value);
         } else {
             return $this->value;
         }
-        
     }
 
     public function setValue($value)
