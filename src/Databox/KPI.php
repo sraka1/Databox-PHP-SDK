@@ -28,10 +28,10 @@ class KPI
     public $date;
 
     /**
-     *
-     * @var string
+     * Array of attributes
+     * @var array
      */
-    public $operation;
+    public $attributes;
 
     /**
      * The prescribed date format
@@ -47,14 +47,7 @@ class KPI
             $date = new \DateTime("now", $UTC);
         }
         $this->date = $date->format(self::DATE_FORMAT);
-        if (! is_null($metricOperation)) {
-            if (in_array($metricOperation, [
-                'None',
-                'Sum'
-            ])) {
-                $this->operation = $metricOperation;
-            }
-        }
+        $this->attributes = [];
     }
 
     /**
@@ -88,29 +81,78 @@ class KPI
         }
     }
 
+    /**
+     * Sets the value
+     * @param string $value Set the values.
+     */
     public function setValue($value)
     {
         $this->value = json_encode($value);
     }
 
+    /**
+     * Gets the date
+     * @return string [description]
+     */
     public function getDate()
     {
         return $this->date;
     }
 
+    /**
+     * Sets the date
+     * @param string $date [description]
+     */
     public function setDate($date)
     {
         $this->date = $date;
     }
 
-    public function getMetricOperation()
+    /**
+     * Adds an attribute to the attribute array
+     * @param string $key   The attribute's key
+     * @param string $value The value associated with the key
+     */
+    public function addAttribute($key, $value)
     {
-        return $this->operation;
+        $this->attributes[$key] = $value;
     }
 
-    public function setMetricOperation(string $operation)
+    /**
+     * Removes an attribute from the attribute array
+     * @param  string $key The attribute key
+     */
+    public function removeAttribute($key)
     {
-        $this->operation = $operation;
+        unset($this->attributes[$key]);
+    }
+
+    /**
+     * Set the attributes array
+     * @param array $attributes The attribute array
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * Gets the attribute array
+     * @return array The attributes array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Fetches an individual attribute
+     * @param  string $key The key for which the value needs to be fetched
+     * @return string The value
+     */
+    public function getAttribute($key)
+    {
+        return $this->attributes[$key];
     }
 
 }

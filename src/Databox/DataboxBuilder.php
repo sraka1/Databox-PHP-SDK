@@ -72,17 +72,6 @@ class DataboxBuilder
     }
 
     /**
-     * Add widget object to current payload.
-     *
-     * @param DataboxWidgetBase $widget
-     *            Widget object.
-     */
-    public function addWidget(\Databox\Widget\Base $widget)
-    {
-        $this->addKpis($widget->getData());
-    }
-
-    /**
      * Returns the current payload in JSON format.
      *
      * @return string The payload.
