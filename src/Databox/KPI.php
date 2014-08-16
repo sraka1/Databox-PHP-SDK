@@ -38,7 +38,7 @@ class KPI
      */
     const DATE_FORMAT = 'Y-m-d\TH:i:s';
 
-    public function __construct($key, $value, $date = null, $metricOperation = null)
+    public function __construct($key, $value, $date = null, $attributes = null)
     {
         $this->key = $key;
         $this->value = json_encode($value);
@@ -47,7 +47,11 @@ class KPI
             $date = new \DateTime("now", $UTC);
         }
         $this->date = $date->format(self::DATE_FORMAT);
-        $this->attributes = [];
+        if (is_null($attributes)) {
+            $this->attributes = [];    
+        } else {
+            $this->attributes = $attributes;
+        }
     }
 
     /**
