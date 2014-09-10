@@ -13,7 +13,7 @@
 		"MIT"
 	],
 	"require" : {
-		"guzzle/guzzle": "3.8.*@dev",
+		"guzzle/guzzle": "3.9.*@dev",
 		"php" : ">=5.4"
 	},
 	"require-dev" : {
