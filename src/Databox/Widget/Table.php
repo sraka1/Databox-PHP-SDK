@@ -53,10 +53,10 @@ class Table extends Base
      *
      * @param string $name
      *            Column name
-     * @param string $type
-     *            Column type
+     * @param string $orderBy
+     *            Specify how to order the column
      */
-    public function addColumn($name, $orderBy = "", $deleteIfEmpty = TRUE)
+    public function addColumn($name, $orderBy = "")
     {
         $this->columns[] = $name;
         $this->orderBy[] = $orderBy;

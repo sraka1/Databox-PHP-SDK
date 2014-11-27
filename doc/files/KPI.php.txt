@@ -4,10 +4,11 @@ namespace Databox;
 /**
  *
  * @author Uros Majeric
- *        
+ *
  */
 class KPI
 {
+
     /**
      * Name of key
      * @var string
@@ -27,19 +28,33 @@ class KPI
     public $date;
 
     /**
+     *
+     * @var string
+     */
+    public $operation;
+
+    /**
      * The prescribed date format
      */
     const DATE_FORMAT = 'Y-m-d\TH:i:s';
 
-    public function __construct($key, $value, $date = null)
+    public function __construct($key, $value, $date = null, $metricOperation = null)
     {
         $this->key = $key;
-        $this->value = $value;
+        $this->value = json_encode($value);
         if (is_null($date) || ! ($date instanceof \DateTime)) {
             $UTC = new \DateTimeZone("UTC");
             $date = new \DateTime("now", $UTC);
         }
         $this->date = $date->format(self::DATE_FORMAT);
+        if (! is_null($metricOperation)) {
+            if (in_array($metricOperation, [
+                'None',
+                'Sum'
+            ])) {
+                $this->operation = $metricOperation;
+            }
+        }
     }
 
     /**
@@ -48,14 +63,14 @@ class KPI
      */
     public function getKey()
     {
-        return $key;
+        return $this->key;
     }
 
     /**
      * Sets the key
      * @param string $key The key to be set
      */
-    public function setKey($key)    
+    public function setKey($key)
     {
         $this->key = $key;
     }
@@ -66,12 +81,16 @@ class KPI
      */
     public function getValue()
     {
-        return $this->value;
+        if (json_last_error() == JSON_ERROR_NONE) {
+            return json_decode($this->value);
+        } else {
+            return $this->value;
+        }
     }
 
     public function setValue($value)
     {
-        $this->value = $value;
+        $this->value = json_encode($value);
     }
 
     public function getDate()
@@ -83,6 +102,18 @@ class KPI
     {
         $this->date = $date;
     }
+
+    public function getMetricOperation()
+    {
+        return $this->operation;
+    }
+
+    public function setMetricOperation(string $operation)
+    {
+        $this->operation = $operation;
+    }
+
 }
 
 ?>
+

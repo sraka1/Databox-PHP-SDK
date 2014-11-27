@@ -74,7 +74,7 @@ class DataboxBuilder
     /**
      * Add widget object to current payload.
      *
-     * @param DataboxWidgetBase $widget
+     * @param \Databox\Widget\Base $widget
      *            Widget object.
      */
     public function addWidget(\Databox\Widget\Base $widget)

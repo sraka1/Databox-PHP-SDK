@@ -19,30 +19,20 @@ The PHP SDK for interacting with the Databox Push API.
 ## Autoloading
 
 `databox-php-sdk` uses [Composer](http://getcomposer.org).
-The first step to use `databox-php-sdk` is to download composer:
+The first step to use `databox-php-sdk` is to download composer, if we don't have it already:
 
 ```bash
 $ curl -s http://getcomposer.org/installer | php
 ```
 
-Then we have to install our dependencies using:
+Then we can add `databox-php-sdk` as a dependency:
 ```bash
-$ php composer.phar install
-```
-Now we can use autoloader from Composer by:
-
-```yaml
-{
-    "require": {
-        "databox/databox-php-sdk": "*"
-    },
-    "minimum-stability": "dev"
-}
+$ composer.phar require databox/databox-php-sdk:1.*
 ```
 
-> `databox-php-sdk` follows the PSR-0 convention names for its classes, which means you can easily integrate `databox-php-sdk` classes loading in your own autoloader.
+> `databox-php-sdk` follows the PSR-0 convention for file structuring and class naming, which means you can easily integrate `databox-php-sdk` classloading in your own autoloader.
 
-## Basic usage of the `databox-php-sdk client
+## Basic usage
 
 ```php
 <?php
@@ -104,17 +94,17 @@ $pie->addSlice("Salami", 50, -10);
 $pie->addSlice("Tuna", 70, -30);
 $builder->addWidget($pie);
 
-$pie = new Widget\Funnel("testfunnel");
-$pie->addSlice("Cheese", 5);
-$pie->addSlice("Meat", 90, -10);
-$pie->addSlice("Apples", 10, -30);
-$builder->addWidget($pie);
+$funnel = new Widget\Funnel("testfunnel");
+$funnel->addSlice("Cheese", 5);
+$funnel->addSlice("Meat", 90, -10);
+$funnel->addSlice("Apples", 10, -30);
+$builder->addWidget($funnel);
 
-$pie = new Widget\Pipeline("testpipeline");
-$pie->addSlice("Mac", 20, 24);
-$pie->addSlice("PC", 30, -10);
-$pie->addSlice("Amiga", 10, -10);
-$builder->addWidget($pie);
+$pipeline = new Widget\Pipeline("testpipeline");
+$pipeline->addSlice("Mac", 20, 24);
+$pipeline->addSlice("PC", 30, -10);
+$pipeline->addSlice("Amiga", 10, -10);
+$builder->addWidget($pipeline);
 
 //You must provide uniqueURL and payload parameters. Payload can be any JSON string, but we reccommend you use our builder class.
 try {

@@ -15,7 +15,7 @@ class DataboxClient extends Client implements DataboxClientInterface
 {
     const DATABOX_API_BASEURL = 'https://api.databox.com';
 
-    protected $userAgent = 'Databox-PHP-SDK/1.2';
+    protected $userAgent = 'Databox-PHP-SDK/1.4';
 
     private $authListener;
 

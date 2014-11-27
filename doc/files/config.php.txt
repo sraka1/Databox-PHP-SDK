@@ -6,13 +6,13 @@
  */
 return array(
     'name' => 'Databox',
-    'apiVersion' => '1',
-    'description' => 'Databox custom application data push client',
+    'apiVersion' => '1.7',
+    'description' => 'Databox PushAPI client',
     'operations' => array(
         'SetPushData' => array(
             'httpMethod' => 'POST',
-            'uri' => 'push/custom/{uniqueUrl}',
-            'summary' => 'Push data to your custom app',
+            'uri' => 'source/{uniqueUrl}/data',
+            'summary' => 'Push data to your custom connection',
             'responseClass' => 'SetPushDataOutput',
             'parameters' => array(
                 'uniqueUrl' => array(
@@ -31,7 +31,7 @@ return array(
         ),
         'GetPushDataLog' => array(
             'httpMethod' => 'GET',
-            'uri' => 'push/custom/{uniqueUrl}/logs',
+            'uri' => 'source/{uniqueUrl}/logs',
             'summary' => 'Get a log of all pushed data to your app',
             'responseClass' => 'GetPushDataLogOutput',
             'parameters' => array(
